@@ -1,4 +1,4 @@
-baseurl = "https://mtik00.github.io/"
+baseurl = "https://mtik00.com/"
 languageCode = "en-us"
 title = "mtik00"
 publishdir = "../build"
