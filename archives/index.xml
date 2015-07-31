@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Archives on mtik00</title>
-    <link>https://mtik00.github.io/archives/</link>
+    <link>https://mtik00.com/archives/</link>
     <description>Recent content in Archives on mtik00</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 01 Jan 1972 00:00:02 -0600</lastBuildDate>
-    <atom:link href="https://mtik00.github.io/archives/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://mtik00.com/archives/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Archive Place Holder</title>
-      <link>https://mtik00.github.io/archives/empty/</link>
+      <link>https://mtik00.com/archives/empty/</link>
       <pubDate>Sat, 01 Jan 1972 00:00:02 -0600</pubDate>
       
-      <guid>https://mtik00.github.io/archives/empty/</guid>
+      <guid>https://mtik00.com/archives/empty/</guid>
       <description></description>
     </item>
     

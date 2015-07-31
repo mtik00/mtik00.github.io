@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
   <title>
-    Wordpress to Hugo // mtik00
+    Wordpress XML to Hugo MD // mtik00
   </title>
 
   <link href="http://gmpg.org/xfn/11" rel="profile">
@@ -16,11 +16,11 @@
 <meta name="author" content="">
 <meta name="generator" content="Hugo 0.14" />
 
-  <meta property="og:title" content="Wordpress to Hugo" />
+  <meta property="og:title" content="Wordpress XML to Hugo MD" />
 <meta property="og:description" content="" />
 <meta property="og:type" content="website" />
 <meta property="og:locale" content="en_US" />
-<meta property="og:url" content="https://mtik00.github.io/2015/07/wordpress-to-hugo/" />
+<meta property="og:url" content="https://mtik00.com/2015/07/wordpress-xml-to-hugo-md/" />
 
 
   
@@ -32,7 +32,7 @@
   
   
 
-  <link rel="stylesheet" href="https://mtik00.github.io//css/redlounge.css">
+  <link rel="stylesheet" href="https://mtik00.com//css/redlounge.css">
   <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
   <link href='//fonts.googleapis.com/css?family=Raleway:400,200,100,700,300,500,600,800' rel='stylesheet' type='text/css'>
   <link href='//fonts.googleapis.com/css?family=Libre+Baskerville:400,700,400italic' rel='stylesheet' type='text/css'>
@@ -133,7 +133,7 @@
     <nav id="primary_nav_wrap">
       <ul>
         
-        <li><span class="nav-item-separator">//</span><a href="https://mtik00.github.io/">Home</a></li>
+        <li><span class="nav-item-separator">//</span><a href="https://mtik00.com/">Home</a></li>
         
             
                 <li><span class="nav-item-separator">//</span><a href="/about/">About</a></li>
@@ -312,7 +312,7 @@ $(document).ready(function() {
 				<small class="toc-label">Contents</small>
 		   	 	<nav id="TableOfContents">
 <ul>
-<li><a href="#the-conversion:0fb87c8efc633224c79e1f60cf7f0750">The Conversion</a></li>
+<li><a href="#the-conversion:689bb1f7ccd933f475db2ace11b77cea">The Conversion</a></li>
 </ul>
 </nav>
 		    </div>
@@ -320,7 +320,7 @@ $(document).ready(function() {
 	    
   		<section class="post">
             <h1 class="post-title">
-              <a href="/2015/07/wordpress-to-hugo/">Wordpress to Hugo</a>
+              <a href="/2015/07/wordpress-xml-to-hugo-md/">Wordpress XML to Hugo MD</a>
             </h1>
             <h3 class="post-subtitle">
             	
@@ -338,7 +338,7 @@ $(document).ready(function() {
 			
 				<div class="post-categories">
 				
-					<a class="post-category post-category-hugo" href="https://mtik00.github.io//categories/hugo">hugo</a>
+					<a class="post-category post-category-hugo" href="https://mtik00.com//categories/hugo">hugo</a>
 				
 				</div>
 			
@@ -353,7 +353,7 @@ $(document).ready(function() {
 
 <p>I won&rsquo;t go into the details, but there <a href="http://lmgtfy.com/?q=static+site+generators">are a few to choose from</a>.  I settled on <a href="http://gohugo.io/">Hugo</a>.  I was mainly interested in it because it seemed easy, was written in <a href="http://golang.org/">Go</a>, and yes, it had a pretty website.</p>
 
-<h1 id="the-conversion:0fb87c8efc633224c79e1f60cf7f0750">The Conversion</h1>
+<h1 id="the-conversion:689bb1f7ccd933f475db2ace11b77cea">The Conversion</h1>
 
 <p>One of the many nice things about WordPress is the ability to export your site into XML (side note, I <em>loath</em> XML).  There are some examples and script that do the conversion for you, but what fun would that be?  In the process, I learned that:</p>
 
@@ -364,15 +364,15 @@ $(document).ready(function() {
 
 <p>On to the script!  <a href="https://gist.github.com/mtik00/75c8f555b49365395e32">You can view the script here.</a>.  I won&rsquo;t go over it in gory detail, but here are the basics.</p>
 
-<p>WP exports everything, but I was only concerned with the post <code>body</code>, the date it was published (<code>pubDate</code>), the <code>category</code>&rsquo;s (I called them <code>tags</code> in the script), the <code>title</code>, and where it should go.  The last part took some predetermined knowledge of how I wanted my Hugo site to be set up (read <code>[permalinks]</code>).</p>
+<p>WP exports everything, but I was only concerned with the post <code>body</code>, the date it was published (<code>pubDate</code>), the <code>category</code>&rsquo;s (I called them <code>tags</code> in the script), the <code>title</code>, and where it should go.  The last part took some predetermined knowledge of how I wanted my Hugo site to be set up (read <a href="http://gohugo.io/extras/permalinks/"><code>[permalinks]</code></a>).  If you look at the exported XML file, there are <em>lots</em> of metadata that I&rsquo;m ignoring (YMMV).</p>
 
 <pre>
 <code class="python">    tree = ET.parse(xml_path)
     channel = tree.find("channel")
     wp_version_check(channel)
 
-    for item in channel.findall("item"):
-        pass</code></pre>
+    for post in channel.findall("item"):
+        print "post title:", post.find("title").text</code></pre>
 
 <p>WP puts all of the posts in a &lt;channel&gt; element.  Each post is located inside an &lt;item&gt; element.  So far, so good!  Now all we need to do is to loop through each item and grab the data we need.</p>
 
@@ -389,7 +389,7 @@ $(document).ready(function() {
 
 <p>I&rsquo;m using this function to convert the <code>pubDate</code> from WordPress to the format that Hugo uses.  Nothing real special here, although I&rsquo;m sure there&rsquo;s a much better way to calculate the time zone.  The string-formatted <code>pubDate</code> will go into the posts front matter, and I parse <code>ltime</code> to figure out where the post should go.</p>
 
-<p>That&rsquo;s the basics.  I ran this script on my entire WordPress XML dump (only 90+ pages, nothing too big).  It created all of the Markdown posts full of HTML.  It was up to me to then go in and adjust some of the HTML so it was rendered a little better by Hugo.</p>
+<p>That&rsquo;s the basics.  I ran this script on my entire WordPress XML dump (only 90+ pages, nothing too big).  It created all of the Markdown posts full of HTML.  It was up to me to then go in and adjust some of the HTML so it was rendered a little better by Hugo.  Most of my time spent was on downloading images, checking them into Git, and reworking the gallery posts to use my new template (which is awesome, because now I can use <code>{{ gallery path/to/gallery/folder }}</code> in my markdown).</p>
 
 <p>The point is, however, I was able to have a fully functioning port of my WordPress blog to Hugo in a matter of hours (the script only took a second to run).  Woot!</p>
 
@@ -416,9 +416,9 @@ $(document).ready(function() {
           	<div id="disqus_thread"></div>
 <script type="text/javascript">
     var disqus_shortname = 'mtik00';
-    var disqus_identifier = 'https:\/\/mtik00.github.io\/2015\/07\/wordpress-to-hugo\/';
-    var disqus_title = 'Wordpress to Hugo';
-    var disqus_url = 'https:\/\/mtik00.github.io\/2015\/07\/wordpress-to-hugo\/';
+    var disqus_identifier = 'https:\/\/mtik00.com\/2015\/07\/wordpress-xml-to-hugo-md\/';
+    var disqus_title = 'Wordpress XML to Hugo MD';
+    var disqus_url = 'https:\/\/mtik00.com\/2015\/07\/wordpress-xml-to-hugo-md\/';
 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
