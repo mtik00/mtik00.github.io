@@ -12,7 +12,7 @@ I've been writing software since I figured out how to hack [Lemonade Stand](http
 
 My interest in computers never waned.  I moved on from my C64, to my parents C128 (dual disk drive!  woot!), to a 286, 386, 486, Pentium, and so on.  After a short stint in the military, I moved to Colorado Springs to go to school.
 
-I graduated from [UCCS](http://www.uccs.edu/) in the spring of 1999 with a Bachelors of Electrical Engineering.  I really thought I wanted to be an analog designing.  That dream was short lived!  I soon realized that what truly made me happy was programming.  With that knowledge in hand, I went back to school.
+I graduated from [UCCS](http://www.uccs.edu/) in the spring of 1999 with a Bachelors of Electrical Engineering.  I really thought I wanted to be an analog designer.  That dream was short lived!  I soon realized that what truly made me happy was programming.  With that knowledge in hand, I went back to school.
 
 I graduated from [CTU](http://www.coloradotech.edu/) in the spring of 2005 with a Masters of Science in Software Engineering.  I finally had the piece of paper that *proved* I could write code.  I left my semiconductor job for a much-more-software-focused job in electrical test equipment (logic analyzers, to be exact).  That worked out great, until they laid me off (no worries, I enjoyed the 3 months severance).  
 
