@@ -137,13 +137,16 @@ def parse(path):
     match = re.search("^\+\+\+(?P<header>.*)^\+\+\+(?P<content>.*)", text, re.DOTALL | re.MULTILINE)
     if match:
         header = match.group("header")
+        if "draft = true" in header:
+            return None
+
         title = re.search("^title = (?P<quote>['\"])(?P<title>.+?)(?P=quote)", header, re.MULTILINE).group("title")
         date = re.search("^date = (?P<quote>['\"])(?P<title>.+?)(?P=quote)", header, re.MULTILINE).group("title")
         date = time.strptime(date[:19], "%Y-%m-%dT%H:%M:%S")
 
         tags_match = re.search("^(categories|tags) = \[(.*?)\]", header, re.MULTILINE)
         if tags_match:
-            tags = tags_match.group(2).replace("'", "").split()
+            tags = tags_match.group(2).replace("'", "").replace('"', "").replace(",", " ").split()
         else:
             tags = []
 
@@ -200,7 +203,7 @@ def get_index(basedir):
             data = parse(path)
 
             # Only add stuff to the index that has content
-            if data["content"]:
+            if data and data["content"]:
                 index.append(parse(path))
 
     return index
