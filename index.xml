@@ -6,18 +6,8 @@
     <description>Recent content on mtik00</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 01 Aug 2015 12:04:36 -0600</lastBuildDate>
+    <lastBuildDate>Thu, 30 Jul 2015 15:39:23 -0600</lastBuildDate>
     <atom:link href="https://mtik00.com/index.xml" rel="self" type="application/rss+xml" />
-    
-    <item>
-      <title>testing</title>
-      <link>https://mtik00.com/2015/08/testing/</link>
-      <pubDate>Sat, 01 Aug 2015 12:04:36 -0600</pubDate>
-      
-      <guid>https://mtik00.com/2015/08/testing/</guid>
-      <description>&lt;p&gt;Testing.&lt;/p&gt;
-</description>
-    </item>
     
     <item>
       <title>Wordpress XML to Hugo MD</title>
