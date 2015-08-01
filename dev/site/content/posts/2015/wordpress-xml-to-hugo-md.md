@@ -21,18 +21,19 @@ On to the script!  [You can view the script here.](https://gist.github.com/mtik0
 
 WP exports everything, but I was only concerned with the post `body`, the date it was published (`pubDate`), the `category`'s (I called them `tags` in the script), the `title`, and where it should go.  The last part took some predetermined knowledge of how I wanted my Hugo site to be set up (read [`[permalinks]`](http://gohugo.io/extras/permalinks/)).  If you look at the exported XML file, there are *lots* of metadata that I'm ignoring (YMMV).
 
-<pre>
-<code class="python">    tree = ET.parse(xml_path)
+{{< highlight python >}}
+    tree = ET.parse(xml_path)
     channel = tree.find("channel")
     wp_version_check(channel)
 
     for post in channel.findall("item"):
-        print "post title:", post.find("title").text</code></pre>
+        print "post title:", post.find("title").text
+{{< /highlight >}}
 
 WP puts all of the posts in a \<channel\> element.  Each post is located inside an \<item\> element.  So far, so good!  Now all we need to do is to loop through each item and grab the data we need.
 
-<pre>
-<code class="python">def wp_to_hugo_date(wp_date, tz_direction=-1):
+{{< highlight python >}}
+def wp_to_hugo_date(wp_date, tz_direction=-1):
     """Converts a UTC time string from the WordPress XML to a Hugo time string."""
     date = time.strptime(wp_date, "%a, %d %b %Y %H:%M:%S +0000")
     date = calendar.timegm(date)
@@ -40,7 +41,8 @@ WP puts all of the posts in a \<channel\> element.  Each post is located inside 
     date = time.strftime("%Y-%m-%dT%H:%M:%S", ltime)
 
     date += "%+03i:00" % (((time.timezone / 3600) - (1 * ltime.tm_isdst)) * tz_direction)
-    return ltime, date</code></pre>
+    return ltime, date
+{{< /highlight >}}
 
 I'm using this function to convert the `pubDate` from WordPress to the format that Hugo uses.  Nothing real special here, although I'm sure there's a much better way to calculate the time zone.  The string-formatted `pubDate` will go into the posts front matter, and I parse `ltime` to figure out where the post should go.
 
