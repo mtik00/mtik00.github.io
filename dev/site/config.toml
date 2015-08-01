@@ -41,11 +41,15 @@ theme = "hugo-redlounge"
     pre = "<i class='fa fa-github fa-lg'></i>"
     url = "https://github.com/mtik00"
     identifier = "github"
-    weight = 200
-
+    weight = -900
 
 [[menu.social]]
     pre = "<i class='fa fa-linkedin fa-lg'></i>"
     url = "https://www.linkedin.com/in/timothymcfadden"
     identifier = "linkedin"
     weight = -200
+
+[[menu.social]]
+    pre = "<i class='fa fa-stack-overflow fa-lg'></i>"
+    url = "http://stackoverflow.com/users/3696827/mtik00"
+    weight = -400
