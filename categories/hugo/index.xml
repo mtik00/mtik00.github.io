@@ -34,26 +34,28 @@
 
 &lt;p&gt;WP exports everything, but I was only concerned with the post &lt;code&gt;body&lt;/code&gt;, the date it was published (&lt;code&gt;pubDate&lt;/code&gt;), the &lt;code&gt;category&lt;/code&gt;&amp;rsquo;s (I called them &lt;code&gt;tags&lt;/code&gt; in the script), the &lt;code&gt;title&lt;/code&gt;, and where it should go.  The last part took some predetermined knowledge of how I wanted my Hugo site to be set up (read &lt;a href=&#34;http://gohugo.io/extras/permalinks/&#34;&gt;&lt;code&gt;[permalinks]&lt;/code&gt;&lt;/a&gt;).  If you look at the exported XML file, there are &lt;em&gt;lots&lt;/em&gt; of metadata that I&amp;rsquo;m ignoring (YMMV).&lt;/p&gt;
 
-&lt;pre&gt;
-&lt;code class=&#34;python&#34;&gt;    tree = ET.parse(xml_path)
-    channel = tree.find(&#34;channel&#34;)
-    wp_version_check(channel)
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    &lt;span style=&#34;color: #f8f8f2&#34;&gt;tree&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;ET&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;parse(xml_path)&lt;/span&gt;
+    &lt;span style=&#34;color: #f8f8f2&#34;&gt;channel&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;tree&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;find(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;channel&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+    &lt;span style=&#34;color: #f8f8f2&#34;&gt;wp_version_check(channel)&lt;/span&gt;
 
-    for post in channel.findall(&#34;item&#34;):
-        print &#34;post title:&#34;, post.find(&#34;title&#34;).text&lt;/code&gt;&lt;/pre&gt;
+    &lt;span style=&#34;color: #66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;post&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;channel&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;findall(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;item&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;):&lt;/span&gt;
+        &lt;span style=&#34;color: #66d9ef&#34;&gt;print&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;post title:&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;post&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;find(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;title&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;text&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
 
 &lt;p&gt;WP puts all of the posts in a &amp;lt;channel&amp;gt; element.  Each post is located inside an &amp;lt;item&amp;gt; element.  So far, so good!  Now all we need to do is to loop through each item and grab the data we need.&lt;/p&gt;
 
-&lt;pre&gt;
-&lt;code class=&#34;python&#34;&gt;def wp_to_hugo_date(wp_date, tz_direction=-1):
-    &#34;&#34;&#34;Converts a UTC time string from the WordPress XML to a Hugo time string.&#34;&#34;&#34;
-    date = time.strptime(wp_date, &#34;%a, %d %b %Y %H:%M:%S +0000&#34;)
-    date = calendar.timegm(date)
-    ltime = time.localtime(date)
-    date = time.strftime(&#34;%Y-%m-%dT%H:%M:%S&#34;, ltime)
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;wp_to_hugo_date&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(wp_date,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;tz_direction&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=-&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;):&lt;/span&gt;
+    &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&amp;quot;&amp;quot;Converts a UTC time string from the WordPress XML to a Hugo time string.&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+    &lt;span style=&#34;color: #f8f8f2&#34;&gt;date&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;time&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;strptime(wp_date,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;%a, %d %b %Y %H:%M:%S +0000&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+    &lt;span style=&#34;color: #f8f8f2&#34;&gt;date&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;calendar&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;timegm(date)&lt;/span&gt;
+    &lt;span style=&#34;color: #f8f8f2&#34;&gt;ltime&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;time&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;localtime(date)&lt;/span&gt;
+    &lt;span style=&#34;color: #f8f8f2&#34;&gt;date&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;time&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;strftime(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;%Y-%m-%dT%H:%M:%S&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;ltime)&lt;/span&gt;
 
-    date += &#34;%+03i:00&#34; % (((time.timezone / 3600) - (1 * ltime.tm_isdst)) * tz_direction)
-    return ltime, date&lt;/code&gt;&lt;/pre&gt;
+    &lt;span style=&#34;color: #f8f8f2&#34;&gt;date&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;+=&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;%+03i:00&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;%&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(((time&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;timezone&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;3600&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;ltime&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;tm_isdst))&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;tz_direction)&lt;/span&gt;
+    &lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;ltime,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;date&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
 
 &lt;p&gt;I&amp;rsquo;m using this function to convert the &lt;code&gt;pubDate&lt;/code&gt; from WordPress to the format that Hugo uses.  Nothing real special here, although I&amp;rsquo;m sure there&amp;rsquo;s a much better way to calculate the time zone.  The string-formatted &lt;code&gt;pubDate&lt;/code&gt; will go into the posts front matter, and I parse &lt;code&gt;ltime&lt;/code&gt; to figure out where the post should go.&lt;/p&gt;
 

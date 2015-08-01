@@ -301,14 +301,7 @@ $(document).ready(function() {
 
     <div class="content pure-u-1 pure-u-md-3-4">
 		<a name="top"></a>
-		  
-  
-  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/tomorrow-night-bright.min.css">
-  
-  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
-  <script>hljs.initHighlightingOnLoad();</script>
-
-
+		
 
 		
 			
@@ -370,26 +363,28 @@ $(document).ready(function() {
 
 <p>WP exports everything, but I was only concerned with the post <code>body</code>, the date it was published (<code>pubDate</code>), the <code>category</code>&rsquo;s (I called them <code>tags</code> in the script), the <code>title</code>, and where it should go.  The last part took some predetermined knowledge of how I wanted my Hugo site to be set up (read <a href="http://gohugo.io/extras/permalinks/"><code>[permalinks]</code></a>).  If you look at the exported XML file, there are <em>lots</em> of metadata that I&rsquo;m ignoring (YMMV).</p>
 
-<pre>
-<code class="python">    tree = ET.parse(xml_path)
-    channel = tree.find("channel")
-    wp_version_check(channel)
+<p><div class="highlight" style="background: #272822"><pre style="line-height: 125%">    <span style="color: #f8f8f2">tree</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">ET</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">parse(xml_path)</span>
+    <span style="color: #f8f8f2">channel</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">tree</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">find(</span><span style="color: #e6db74">&quot;channel&quot;</span><span style="color: #f8f8f2">)</span>
+    <span style="color: #f8f8f2">wp_version_check(channel)</span>
 
-    for post in channel.findall("item"):
-        print "post title:", post.find("title").text</code></pre>
+    <span style="color: #66d9ef">for</span> <span style="color: #f8f8f2">post</span> <span style="color: #f92672">in</span> <span style="color: #f8f8f2">channel</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">findall(</span><span style="color: #e6db74">&quot;item&quot;</span><span style="color: #f8f8f2">):</span>
+        <span style="color: #66d9ef">print</span> <span style="color: #e6db74">&quot;post title:&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #f8f8f2">post</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">find(</span><span style="color: #e6db74">&quot;title&quot;</span><span style="color: #f8f8f2">)</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">text</span>
+</pre></div>
+</p>
 
 <p>WP puts all of the posts in a &lt;channel&gt; element.  Each post is located inside an &lt;item&gt; element.  So far, so good!  Now all we need to do is to loop through each item and grab the data we need.</p>
 
-<pre>
-<code class="python">def wp_to_hugo_date(wp_date, tz_direction=-1):
-    """Converts a UTC time string from the WordPress XML to a Hugo time string."""
-    date = time.strptime(wp_date, "%a, %d %b %Y %H:%M:%S +0000")
-    date = calendar.timegm(date)
-    ltime = time.localtime(date)
-    date = time.strftime("%Y-%m-%dT%H:%M:%S", ltime)
+<p><div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span style="color: #66d9ef">def</span> <span style="color: #a6e22e">wp_to_hugo_date</span><span style="color: #f8f8f2">(wp_date,</span> <span style="color: #f8f8f2">tz_direction</span><span style="color: #f92672">=-</span><span style="color: #ae81ff">1</span><span style="color: #f8f8f2">):</span>
+    <span style="color: #e6db74">&quot;&quot;&quot;Converts a UTC time string from the WordPress XML to a Hugo time string.&quot;&quot;&quot;</span>
+    <span style="color: #f8f8f2">date</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">time</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">strptime(wp_date,</span> <span style="color: #e6db74">&quot;%a, %d %b %Y %H:%M:%S +0000&quot;</span><span style="color: #f8f8f2">)</span>
+    <span style="color: #f8f8f2">date</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">calendar</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">timegm(date)</span>
+    <span style="color: #f8f8f2">ltime</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">time</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">localtime(date)</span>
+    <span style="color: #f8f8f2">date</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">time</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">strftime(</span><span style="color: #e6db74">&quot;%Y-%m-%dT%H:%M:%S&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #f8f8f2">ltime)</span>
 
-    date += "%+03i:00" % (((time.timezone / 3600) - (1 * ltime.tm_isdst)) * tz_direction)
-    return ltime, date</code></pre>
+    <span style="color: #f8f8f2">date</span> <span style="color: #f92672">+=</span> <span style="color: #e6db74">&quot;%+03i:00&quot;</span> <span style="color: #f92672">%</span> <span style="color: #f8f8f2">(((time</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">timezone</span> <span style="color: #f92672">/</span> <span style="color: #ae81ff">3600</span><span style="color: #f8f8f2">)</span> <span style="color: #f92672">-</span> <span style="color: #f8f8f2">(</span><span style="color: #ae81ff">1</span> <span style="color: #f92672">*</span> <span style="color: #f8f8f2">ltime</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">tm_isdst))</span> <span style="color: #f92672">*</span> <span style="color: #f8f8f2">tz_direction)</span>
+    <span style="color: #66d9ef">return</span> <span style="color: #f8f8f2">ltime,</span> <span style="color: #f8f8f2">date</span>
+</pre></div>
+</p>
 
 <p>I&rsquo;m using this function to convert the <code>pubDate</code> from WordPress to the format that Hugo uses.  Nothing real special here, although I&rsquo;m sure there&rsquo;s a much better way to calculate the time zone.  The string-formatted <code>pubDate</code> will go into the posts front matter, and I parse <code>ltime</code> to figure out where the post should go.</p>
 
