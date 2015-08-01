@@ -10,7 +10,9 @@ draft = true
 -   windows
 -   %HOME%\.ssh\config
 -   putty KeyGen (public/private)
--   Add to AWS instance
+    -   no password protection: protect this key!
+-   Add to AWS instance / GitHub account
+-   (alternatively use the password plugin windows app)
 
 ```
 Host example.com ec2-111-111-111-111.us-west-2.compute.amazonaws.com
