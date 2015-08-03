@@ -319,7 +319,7 @@ a.post-category:hover {
 
 /* Social Sharing */
 .social-sharing {
-    clear: right;
+    clear: left;
     padding-left: 2px;
     margin-top: 0.75rem;
     margin-bottom: 0.75rem;
@@ -372,15 +372,6 @@ a.post-category:hover {
 }
 
 /* Paging */
-.pagination a {
-    background-color: #fff !important;
-    color: #7F1000 !important;
-}
-.pagination .active a {
-    background-color: #999 !important;
-    color: #7F1000 !important;
-}
-
 .paging {
     margin-bottom: 0.75rem;
 }
@@ -465,9 +456,7 @@ hr.thin {
 @media (min-width: 48rem) {
     .content {
         padding: 2rem 3rem 0;
-        /*margin-left: 25%;*/
-        margin-left: 400px;
-        min-width: 400px;
+        margin-left: 25%;
     }
 
     .content-banner-image {
@@ -480,7 +469,6 @@ hr.thin {
     }
 
     .sidebar {
-        width: 400px;
         position: fixed;
         top: 0;
         bottom: 0;
