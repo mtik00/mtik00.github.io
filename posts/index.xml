@@ -6,8 +6,103 @@
     <description>Recent content in Posts on mtik00</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 30 Jul 2015 15:39:23 -0600</lastBuildDate>
+    <lastBuildDate>Sun, 02 Aug 2015 22:15:32 -0600</lastBuildDate>
     <atom:link href="https://mtik00.com/posts/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Nginx Proxy for GitHub Pages</title>
+      <link>https://mtik00.com/2015/08/nginx-proxy-for-github-pages/</link>
+      <pubDate>Sun, 02 Aug 2015 22:15:32 -0600</pubDate>
+      
+      <guid>https://mtik00.com/2015/08/nginx-proxy-for-github-pages/</guid>
+      <description>
+
+&lt;p&gt;&lt;a href=&#34;https://www.nginx.com/&#34;&gt;Nginx&lt;/a&gt; is my favorite web server.  I find it &lt;em&gt;much&lt;/em&gt; easier to configure and use than Apache.  If you believe the hype, it&amp;rsquo;s also faster and consumes fewer resources.  That&amp;rsquo;s really not the point of this article, however.&lt;/p&gt;
+
+&lt;p&gt;This point of this article is to show you how you configure Nginx on your server to serve static content that is actually served by GitHub pages.&lt;/p&gt;
+
+&lt;h1 id=&#34;tl-dr:fae300191a56abce8a320c4057f8da61&#34;&gt;TL;DR&lt;/h1&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Create a &lt;code&gt;pages&lt;/code&gt; repo&lt;/li&gt;
+&lt;li&gt;Clone it to your local computer&lt;/li&gt;
+&lt;li&gt;Check in you static files&lt;/li&gt;
+&lt;li&gt;Set up your Nginx configuration file&lt;/li&gt;
+&lt;li&gt;`git commit -am&amp;rdquo;&amp;hellip;&amp;rdquo; &amp;amp;&amp;amp; git push&lt;/li&gt;
+&lt;li&gt;Profit!&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h1 id=&#34;github-pages:fae300191a56abce8a320c4057f8da61&#34;&gt;GitHub Pages&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com&#34;&gt;GitHub&lt;/a&gt; alows users to store static web content (HTML, CSS, and JS) in specific repositories.  The only real caveat is that you must have &lt;code&gt;index.html&lt;/code&gt; in your repository root.  Of course, your files will also be public if you are using the free service.  This service is called &lt;a href=&#34;https://pages.github.com/&#34;&gt;GitHub Pages&lt;/a&gt;.  &lt;a href=&#34;https://github.com/mtik00/mtik00.github.io&#34;&gt;Here is this blogs repository&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h1 id=&#34;content:fae300191a56abce8a320c4057f8da61&#34;&gt;Content&lt;/h1&gt;
+
+&lt;p&gt;There are lots of ways to create your site.  I use &lt;a href=&#34;http://gohugo.io&#34;&gt;Hugo&lt;/a&gt; to generate the blog out of easy-to-generate Markdown files.  Nice and &lt;em&gt;relatively&lt;/em&gt; simple.  However you do it, you&amp;rsquo;ll need to be able to generate static content.&lt;/p&gt;
+
+&lt;h1 id=&#34;nginx:fae300191a56abce8a320c4057f8da61&#34;&gt;Nginx&lt;/h1&gt;
+
+&lt;p&gt;GitHub will serve up your pages to the web world just fine.  For this blog, you can go to &lt;a href=&#34;https://mtik00.github.io&#34;&gt;https://mtik00.github.io&lt;/a&gt; to browse it.  It looks the same as &lt;a href=&#34;https://mtik00.com&#34;&gt;https://mtik00.com&lt;/a&gt;, with the exception of the SSL key.  If you want users to go to your custom URL, and you want to manage your own SSL keys, you&amp;rsquo;ll need to set up an Nginx &lt;em&gt;proxy&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;NOTE: If you don&amp;rsquo;t care about SSL and only want a custom domain, read this instead: &lt;a href=&#34;https://help.github.com/articles/setting-up-a-custom-domain-with-github-pages/&#34;&gt;https://help.github.com/articles/setting-up-a-custom-domain-with-github-pages/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Since your content is hosted on GitHub, you only need an Nginx configuration file that redirects.  Here&amp;rsquo;s the configuration that I use (without the SSL setup):&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;server&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+    &lt;span style=&#34;color: #f92672&#34;&gt;server_name&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;mtik00.com&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+    &lt;span style=&#34;color: #f92672&#34;&gt;listen&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;443&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;ssl&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;spdy&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+
+    &lt;span style=&#34;color: #75715e&#34;&gt;# The site is actually hosted on github pages.  Using this proxy location&lt;/span&gt;
+    &lt;span style=&#34;color: #75715e&#34;&gt;# allows us to secure the connection with our own SSL keys, instead of the&lt;/span&gt;
+    &lt;span style=&#34;color: #75715e&#34;&gt;# generic github.io SSL keys.&lt;/span&gt;
+
+    &lt;span style=&#34;color: #f92672&#34;&gt;location&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;/&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+        &lt;span style=&#34;color: #f92672&#34;&gt;proxy_pass&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;https://mtik00.github.io&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+        &lt;span style=&#34;color: #f92672&#34;&gt;proxy_intercept_errors&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;on&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+
+        &lt;span style=&#34;color: #75715e&#34;&gt;# allow GitHub to pass caching headers instead of using our own&lt;/span&gt;
+        &lt;span style=&#34;color: #f92672&#34;&gt;expires&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;off&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+    &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;The &lt;em&gt;magic&lt;/em&gt; happens when a user navigates to &lt;a href=&#34;https://mtik00.com/&#34;&gt;https://mtik00.com/&lt;/a&gt;.  When the happens, the &lt;code&gt;location /&lt;/code&gt; block matches, and all of the content is silently served from &lt;a href=&#34;http://mtik00.github.io&#34;&gt;http://mtik00.github.io&lt;/a&gt;.  How cool is that?&lt;/p&gt;
+
+&lt;p&gt;Users will never know (nor will they care).&lt;/p&gt;
+
+&lt;h1 id=&#34;why:fae300191a56abce8a320c4057f8da61&#34;&gt;Why&lt;/h1&gt;
+
+&lt;p&gt;This might all seem a bit silly.  Really, if already have a web server running Nginx, why set up the proxy in the first place?  Why not just store your content on the server?  Well, the way I see it, this method has the following benefits:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;git commit -am&amp;quot;...&amp;quot; &amp;amp;&amp;amp; git push&lt;/code&gt; is all that&amp;rsquo;s needed to update your site&lt;/li&gt;
+&lt;li&gt;Your content won&amp;rsquo;t take up any space on your web server&lt;/li&gt;
+&lt;li&gt;You get to control your content entirely&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Only you can decide if it&amp;rsquo;s work it.  It is for me.  I can decide at any time to move the content off of GitHub, I can create new SSL keys as needed, and all I need to do to update is to &lt;code&gt;push&lt;/code&gt; the new pages back up to GitHub.&lt;/p&gt;
+
+&lt;h1 id=&#34;folder-structure:fae300191a56abce8a320c4057f8da61&#34;&gt;Folder Structure&lt;/h1&gt;
+
+&lt;p&gt;As I&amp;rsquo;ve mentioned before, I use Hugo to generate the static HTML files that are served by GitHub.  That, in itself, is a separate repository.  I started off with everything in the same repo.  It was a little odd, but it &lt;em&gt;wasn&amp;rsquo;t quite right&lt;/em&gt;.  My development files were in a folder called &lt;code&gt;dev&lt;/code&gt;, and the generated HTML files were in the repo root.  I decided to make things a little more complex to make the static html file repo cleaner.&lt;/p&gt;
+
+&lt;p&gt;I currently have two projects:  1) My development files; 2) My GitHub pages static HTML files.  The trick here is that my GitHub pages repo is a &lt;em&gt;subtree&lt;/em&gt; located inside my other repo.  It looks like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;mtik00-pages/
+mtik00-pages/mtik00.github.com
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The base folder contains my development enviroment (batch files, python scripts, hugo binaries, etc).  The only thing &lt;code&gt;mtik00-pages/mtik00.github.com&lt;/code&gt; contains are HTML/CSS/JS files.  My normal process goes like this:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;hugo new content/post&lt;/li&gt;
+&lt;li&gt;edit the post in &lt;a href=&#34;http://www.sublimetext.com/&#34;&gt;SublimeText2&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;commit the new content: &lt;code&gt;git add . &amp;amp;&amp;amp; git commit -am&amp;quot;adding new post&amp;quot;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;build the static pages:  &lt;code&gt;hugo -d&amp;quot;mtik00.github.com&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;deploy the static pages: &lt;code&gt;cd mtik00.github.com &amp;amp;&amp;amp; git add -A . &amp;amp;&amp;amp; git commit -am&amp;quot;new pages&amp;quot; &amp;amp;&amp;amp; git push&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+    </item>
     
     <item>
       <title>Wordpress XML to Hugo MD</title>
