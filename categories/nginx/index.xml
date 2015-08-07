@@ -28,7 +28,7 @@
 &lt;li&gt;Clone it to your local computer&lt;/li&gt;
 &lt;li&gt;Check in your static files&lt;/li&gt;
 &lt;li&gt;Set up your Nginx configuration file&lt;/li&gt;
-&lt;li&gt;`git commit -am&amp;rdquo;&amp;hellip;&amp;rdquo; &amp;amp;&amp;amp; git push&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;git commit -am&amp;quot;...&amp;quot; &amp;amp;&amp;amp; git push&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;Profit!&lt;/li&gt;
 &lt;/ol&gt;
 
