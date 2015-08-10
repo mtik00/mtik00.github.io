@@ -28,6 +28,8 @@
 &lt;p&gt;It&amp;rsquo;s quick and easy!  It&amp;rsquo;s &lt;em&gt;slightly&lt;/em&gt; easier than just changing it with your text editor.&lt;/p&gt;
 
 &lt;p&gt;NOTE: This command only takes into consideration timezones that change on the hour!  Sorry &lt;a href=&#34;http://www.timeanddate.com/worldclock/india/new-delhi&#34;&gt;India&lt;/a&gt; (and more)&amp;hellip;&lt;/p&gt;
+
+&lt;p&gt;UPDATE 8/10/2015: I just came across the &lt;a href=&#34;https://gohugo.io/commands/hugo_undraft/&#34;&gt;&lt;code&gt;hugo undraft&lt;/code&gt;&lt;/a&gt; command that does basically the same thing.&lt;/p&gt;
 </description>
     </item>
     
