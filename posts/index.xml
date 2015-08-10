@@ -6,8 +6,30 @@
     <description>Recent content in Posts on mtik00</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 02 Aug 2015 22:15:32 -0600</lastBuildDate>
+    <lastBuildDate>Sun, 09 Aug 2015 21:07:30 -0600</lastBuildDate>
     <atom:link href="https://mtik00.com/posts/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Create a Post Date/Time with Python</title>
+      <link>https://mtik00.com/2015/08/create-a-post-date-time-with-python/</link>
+      <pubDate>Sun, 09 Aug 2015 21:07:30 -0600</pubDate>
+      
+      <guid>https://mtik00.com/2015/08/create-a-post-date-time-with-python/</guid>
+      <description>&lt;p&gt;I like to create draft posts as kind of &lt;em&gt;markers&lt;/em&gt; for things I want to write about in the future.  Unfortunately, when I do a &lt;code&gt;hugo new post...&lt;/code&gt;, the current date is already put in the front matter for me. That&amp;rsquo;s &lt;strong&gt;really&lt;/strong&gt; handy if I&amp;rsquo;m posting right away, but not so much if I have a &lt;em&gt;draft&lt;/em&gt; for a really long time.&lt;/p&gt;
+
+&lt;p&gt;If you have Python installed on your system, here&amp;rsquo;s a quick one-liner to print out the current &lt;a href=&#34;https://docs.python.org/2/library/time.html?highlight=time.strftime#time.strftime&#34;&gt;date/time&lt;/a&gt; in Hugo&amp;rsquo;s (really Go&amp;rsquo;s) format:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;python&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;c&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;import time; print time.strftime(&amp;#39;%Y-%m-%dT%H:%M:%S&amp;#39;, time.localtime()) + &amp;#39;%+03i:00&amp;#39; % (-1*(time.altzone / 3600) if time.daylight else (-1*(time.timezone/3600)));&amp;quot;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;I have that line wrapped in a batch file that I can run called &lt;code&gt;htime.bat&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;It&amp;rsquo;s quick and easy!  It&amp;rsquo;s &lt;em&gt;slightly&lt;/em&gt; easier than just changing it with your text editor.&lt;/p&gt;
+
+&lt;p&gt;NOTE: This command only takes into consideration timezones that change on the hour!  Sorry &lt;a href=&#34;http://www.timeanddate.com/worldclock/india/new-delhi&#34;&gt;India&lt;/a&gt; (and more)&amp;hellip;&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Nginx Proxy for GitHub Pages</title>
