@@ -6,8 +6,66 @@
     <description>Recent content on mtik00</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 09 Aug 2015 21:07:30 -0600</lastBuildDate>
+    <lastBuildDate>Mon, 10 Aug 2015 20:57:46 -0600</lastBuildDate>
     <atom:link href="https://mtik00.com/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Testing Pipelined Static Content</title>
+      <link>https://mtik00.com/2015/08/testing-pipelined-static-content/</link>
+      <pubDate>Mon, 10 Aug 2015 20:57:46 -0600</pubDate>
+      
+      <guid>https://mtik00.com/2015/08/testing-pipelined-static-content/</guid>
+      <description>&lt;p&gt;After working quite hard on my &lt;code&gt;pre&lt;/code&gt; and &lt;code&gt;post&lt;/code&gt; Hugo pipeline, I needed a way to test the actual content that will be pushed to the server.  Python (once again) to the rescue!&lt;/p&gt;
+
+&lt;p&gt;I &lt;em&gt;really&lt;/em&gt; love Hugo&amp;rsquo;s built-in server.  &lt;code&gt;hugo serve --watch&lt;/code&gt; is truly a great time saver.  However, it has nothing to do with our pipeline (fingerprinting, compressing, etc).  If we want to see what the end result is going to look like, we need a way to serve that content.&lt;/p&gt;
+
+&lt;p&gt;Python has many built-in packages.  That&amp;rsquo;s the main reason it&amp;rsquo;s my language of choice.  Python has a simple web server ready to go.  I use &lt;code&gt;hugo serve --watch&lt;/code&gt; when I&amp;rsquo;m creating my content.  When I want to check the output of my pipeline, I use the following on the command-line:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f0f0f0&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;cd &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&lt;/span&gt;path to content&lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; python &lt;span style=&#34;color: #666666&#34;&gt;-&lt;/span&gt;m SimpleHTTPServer &lt;span style=&#34;color: #40a070&#34;&gt;8000&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;python -m SimpleHTTPServer 8000&lt;/code&gt; tells Python to load the SimpleHTTPServer module and serve the content it finds in the current working directory on port 8000.  Technically, you are running &lt;code&gt;SimpleHTTPServer.__main__()&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;The great thing about this is that I can run both the Python server and the Hugo server at the same time, depending on what I need.&lt;/p&gt;
+
+&lt;p&gt;Here&amp;rsquo;s the batch file I use for this:
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f0f0f0&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;@&lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;off&lt;/span&gt;
+&lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;cd&lt;/span&gt; &lt;span style=&#34;color: #bb60d5&#34;&gt;%~dp0&lt;/span&gt;..
+
+&lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color: #bb60d5&#34;&gt;%1&lt;/span&gt;|findstr /xr &lt;span style=&#34;color: #4070a0&#34;&gt;&amp;quot;p&amp;quot;&lt;/span&gt; &amp;gt;nul &amp;amp;&amp;amp; (
+  &lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;goto&lt;/span&gt; &lt;span style=&#34;color: #002070; font-weight: bold&#34;&gt;:python&lt;/span&gt;
+) || (
+  &lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;goto&lt;/span&gt; &lt;span style=&#34;color: #002070; font-weight: bold&#34;&gt;:hugo&lt;/span&gt;
+)
+
+&lt;span style=&#34;color: #60a0b0; font-style: italic&#34;&gt;:: =============================================================================&lt;/span&gt;
+&lt;span style=&#34;color: #60a0b0; font-style: italic&#34;&gt;:: Run python on the already-built static pages.  This is for checking the end&lt;/span&gt;
+&lt;span style=&#34;color: #60a0b0; font-style: italic&#34;&gt;:: result of the pipeline to ensure everything worked.&lt;/span&gt;
+&lt;span style=&#34;color: #002070; font-weight: bold&#34;&gt;:python&lt;/span&gt;
+pushd mtik&lt;span style=&#34;color: #40a070&#34;&gt;00&lt;/span&gt;.github.io
+start python -m SimpleHTTPServer &lt;span style=&#34;color: #40a070&#34;&gt;8000&lt;/span&gt;
+popd
+&lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;goto&lt;/span&gt; &lt;span style=&#34;color: #002070; font-weight: bold&#34;&gt;:end&lt;/span&gt;
+&lt;span style=&#34;color: #60a0b0; font-style: italic&#34;&gt;:: =============================================================================&lt;/span&gt;
+
+&lt;span style=&#34;color: #60a0b0; font-style: italic&#34;&gt;:: =============================================================================&lt;/span&gt;
+&lt;span style=&#34;color: #60a0b0; font-style: italic&#34;&gt;:: Clean the Hugo build directory, then call Hugo to serve the content&lt;/span&gt;
+&lt;span style=&#34;color: #002070; font-weight: bold&#34;&gt;:hugo&lt;/span&gt;
+&lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;IF&lt;/span&gt; &lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;EXIST&lt;/span&gt; build (
+    rmdir /q /s build
+    sleep &lt;span style=&#34;color: #40a070&#34;&gt;1&lt;/span&gt;
+)
+
+start hugo server --watch --source&lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #4070a0&#34;&gt;&amp;quot;site&amp;quot;&lt;/span&gt; --bind&lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #4070a0&#34;&gt;&amp;quot;localhost&amp;quot;&lt;/span&gt;
+&lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;goto&lt;/span&gt; &lt;span style=&#34;color: #002070; font-weight: bold&#34;&gt;:end&lt;/span&gt;
+&lt;span style=&#34;color: #60a0b0; font-style: italic&#34;&gt;:: =============================================================================&lt;/span&gt;
+
+&lt;span style=&#34;color: #002070; font-weight: bold&#34;&gt;:end&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Create a Post Date/Time with Python</title>
@@ -19,7 +77,7 @@
 
 &lt;p&gt;If you have Python installed on your system, here&amp;rsquo;s a quick one-liner to print out the current &lt;a href=&#34;https://docs.python.org/2/library/time.html?highlight=time.strftime#time.strftime&#34;&gt;date/time&lt;/a&gt; in Hugo&amp;rsquo;s (really Go&amp;rsquo;s) format:&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;python&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;c&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;import time; print time.strftime(&amp;#39;%Y-%m-%dT%H:%M:%S&amp;#39;, time.localtime()) + &amp;#39;%+03i:00&amp;#39; % (-1*(time.altzone / 3600) if time.daylight else (-1*(time.timezone/3600)));&amp;quot;&lt;/span&gt;
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f0f0f0&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;python &lt;span style=&#34;color: #666666&#34;&gt;-&lt;/span&gt;c &lt;span style=&#34;color: #4070a0&#34;&gt;&amp;quot;import time; print time.strftime(&amp;#39;%Y-%m-&lt;/span&gt;&lt;span style=&#34;color: #70a0d0; font-style: italic&#34;&gt;%d&lt;/span&gt;&lt;span style=&#34;color: #4070a0&#34;&gt;T%H:%M:%S&amp;#39;, time.localtime()) + &amp;#39;&lt;/span&gt;&lt;span style=&#34;color: #70a0d0; font-style: italic&#34;&gt;%+03i&lt;/span&gt;&lt;span style=&#34;color: #4070a0&#34;&gt;:00&amp;#39; % (-1*(time.altzone / 3600) if time.daylight else (-1*(time.timezone/3600)));&amp;quot;&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/p&gt;
 
@@ -72,21 +130,21 @@
 
 &lt;p&gt;Since your content is hosted on GitHub, you only need an Nginx configuration file that redirects.  Here&amp;rsquo;s the configuration that I use (without the SSL setup):&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;server&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
-    &lt;span style=&#34;color: #f92672&#34;&gt;server_name&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;mtik00.com&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
-    &lt;span style=&#34;color: #f92672&#34;&gt;listen&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;443&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;ssl&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;spdy&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f0f0f0&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;server&lt;/span&gt; {
+    &lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;server_name&lt;/span&gt; &lt;span style=&#34;color: #4070a0&#34;&gt;mtik00.com&lt;/span&gt;;
+    &lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;listen&lt;/span&gt; &lt;span style=&#34;color: #40a070&#34;&gt;443&lt;/span&gt; &lt;span style=&#34;color: #4070a0&#34;&gt;ssl&lt;/span&gt; &lt;span style=&#34;color: #4070a0&#34;&gt;spdy&lt;/span&gt;;
 
-    &lt;span style=&#34;color: #75715e&#34;&gt;# The site is actually hosted on github pages.  Using this proxy location&lt;/span&gt;
-    &lt;span style=&#34;color: #75715e&#34;&gt;# allows us to secure the connection with our own SSL keys, instead of the&lt;/span&gt;
-    &lt;span style=&#34;color: #75715e&#34;&gt;# generic github.io SSL keys.&lt;/span&gt;
+    &lt;span style=&#34;color: #60a0b0; font-style: italic&#34;&gt;# The site is actually hosted on github pages.  Using this proxy location&lt;/span&gt;
+    &lt;span style=&#34;color: #60a0b0; font-style: italic&#34;&gt;# allows us to secure the connection with our own SSL keys, instead of the&lt;/span&gt;
+    &lt;span style=&#34;color: #60a0b0; font-style: italic&#34;&gt;# generic github.io SSL keys.&lt;/span&gt;
 
-    &lt;span style=&#34;color: #f92672&#34;&gt;location&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;/&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
-        &lt;span style=&#34;color: #f92672&#34;&gt;proxy_pass&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;https://mtik00.github.io&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
-        &lt;span style=&#34;color: #f92672&#34;&gt;proxy_intercept_errors&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;on&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
+    &lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;location&lt;/span&gt; &lt;span style=&#34;color: #4070a0&#34;&gt;/&lt;/span&gt; {
+        &lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;proxy_pass&lt;/span&gt; &lt;span style=&#34;color: #4070a0&#34;&gt;https://mtik00.github.io&lt;/span&gt;;
+        &lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;proxy_intercept_errors&lt;/span&gt; &lt;span style=&#34;color: #60add5&#34;&gt;on&lt;/span&gt;;
 
-        &lt;span style=&#34;color: #75715e&#34;&gt;# allow GitHub to pass caching headers instead of using our own&lt;/span&gt;
-        &lt;span style=&#34;color: #f92672&#34;&gt;expires&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;off&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
-    &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+        &lt;span style=&#34;color: #60a0b0; font-style: italic&#34;&gt;# allow GitHub to pass caching headers instead of using our own&lt;/span&gt;
+        &lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;expires&lt;/span&gt; &lt;span style=&#34;color: #60add5&#34;&gt;off&lt;/span&gt;;
+    }
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/p&gt;
 
@@ -153,26 +211,26 @@ mtik00-pages/mtik00.github.com
 
 &lt;p&gt;WP exports everything, but I was only concerned with the post &lt;code&gt;body&lt;/code&gt;, the date it was published (&lt;code&gt;pubDate&lt;/code&gt;), the &lt;code&gt;category&lt;/code&gt;&amp;rsquo;s (I called them &lt;code&gt;tags&lt;/code&gt; in the script), the &lt;code&gt;title&lt;/code&gt;, and where it should go.  The last part took some predetermined knowledge of how I wanted my Hugo site to be set up (read &lt;a href=&#34;http://gohugo.io/extras/permalinks/&#34;&gt;&lt;code&gt;[permalinks]&lt;/code&gt;&lt;/a&gt;).  If you look at the exported XML file, there are &lt;em&gt;lots&lt;/em&gt; of metadata that I&amp;rsquo;m ignoring (YMMV).&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    &lt;span style=&#34;color: #f8f8f2&#34;&gt;tree&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;ET&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;parse(xml_path)&lt;/span&gt;
-    &lt;span style=&#34;color: #f8f8f2&#34;&gt;channel&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;tree&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;find(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;channel&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
-    &lt;span style=&#34;color: #f8f8f2&#34;&gt;wp_version_check(channel)&lt;/span&gt;
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f0f0f0&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    tree &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; ET&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;parse(xml_path)
+    channel &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; tree&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;find(&lt;span style=&#34;color: #4070a0&#34;&gt;&amp;quot;channel&amp;quot;&lt;/span&gt;)
+    wp_version_check(channel)
 
-    &lt;span style=&#34;color: #66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;post&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;channel&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;findall(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;item&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;):&lt;/span&gt;
-        &lt;span style=&#34;color: #66d9ef&#34;&gt;print&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;post title:&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;post&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;find(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;title&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;text&lt;/span&gt;
+    &lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;for&lt;/span&gt; post &lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;in&lt;/span&gt; channel&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;findall(&lt;span style=&#34;color: #4070a0&#34;&gt;&amp;quot;item&amp;quot;&lt;/span&gt;):
+        &lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;print&lt;/span&gt; &lt;span style=&#34;color: #4070a0&#34;&gt;&amp;quot;post title:&amp;quot;&lt;/span&gt;, post&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;find(&lt;span style=&#34;color: #4070a0&#34;&gt;&amp;quot;title&amp;quot;&lt;/span&gt;)&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;text
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/p&gt;
 
 &lt;p&gt;WP puts all of the posts in a &amp;lt;channel&amp;gt; element.  Each post is located inside an &amp;lt;item&amp;gt; element.  So far, so good!  Now all we need to do is to loop through each item and grab the data we need.&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;wp_to_hugo_date&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(wp_date):&lt;/span&gt;
-    &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&amp;quot;&amp;quot;Converts a UTC time string from the WordPress XML to a Hugo time string.&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
-    &lt;span style=&#34;color: #f8f8f2&#34;&gt;date&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;time&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;strptime(wp_date,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;%a, %d %b %Y %H:%M:%S +0000&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
-    &lt;span style=&#34;color: #f8f8f2&#34;&gt;date&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;calendar&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;timegm(date)&lt;/span&gt;
-    &lt;span style=&#34;color: #f8f8f2&#34;&gt;ltime&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;time&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;localtime(date)&lt;/span&gt;
-    &lt;span style=&#34;color: #f8f8f2&#34;&gt;date&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;time&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;strftime(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;%Y-%m-%dT%H:%M:%S&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;ltime)&lt;/span&gt;
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f0f0f0&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #06287e&#34;&gt;wp_to_hugo_date&lt;/span&gt;(wp_date):
+    &lt;span style=&#34;color: #4070a0; font-style: italic&#34;&gt;&amp;quot;&amp;quot;&amp;quot;Converts a UTC time string from the WordPress XML to a Hugo time string.&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+    date &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; time&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;strptime(wp_date, &lt;span style=&#34;color: #4070a0&#34;&gt;&amp;quot;%a, &lt;/span&gt;&lt;span style=&#34;color: #70a0d0; font-style: italic&#34;&gt;%d&lt;/span&gt;&lt;span style=&#34;color: #4070a0&#34;&gt; %b %Y %H:%M:%S +0000&amp;quot;&lt;/span&gt;)
+    date &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; calendar&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;timegm(date)
+    ltime &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; time&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;localtime(date)
+    date &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; time&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;strftime(&lt;span style=&#34;color: #4070a0&#34;&gt;&amp;quot;%Y-%m-&lt;/span&gt;&lt;span style=&#34;color: #70a0d0; font-style: italic&#34;&gt;%d&lt;/span&gt;&lt;span style=&#34;color: #4070a0&#34;&gt;T%H:%M:%S&amp;quot;&lt;/span&gt;, ltime)
 
-    &lt;span style=&#34;color: #f8f8f2&#34;&gt;date&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;+=&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;%+03i:00&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;%&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(time&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;altzone&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;3600&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;time&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;daylight&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(time&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;timezone&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;/&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;3600&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)))&lt;/span&gt;
-    &lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;ltime,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;date&lt;/span&gt;
+    date &lt;span style=&#34;color: #666666&#34;&gt;+=&lt;/span&gt; &lt;span style=&#34;color: #4070a0&#34;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #70a0d0; font-style: italic&#34;&gt;%+03i&lt;/span&gt;&lt;span style=&#34;color: #4070a0&#34;&gt;:00&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;%&lt;/span&gt; (&lt;span style=&#34;color: #666666&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color: #40a070&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt; (time&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;altzone &lt;span style=&#34;color: #666666&#34;&gt;/&lt;/span&gt; &lt;span style=&#34;color: #40a070&#34;&gt;3600&lt;/span&gt;) &lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;if&lt;/span&gt; time&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;daylight &lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;else&lt;/span&gt; (&lt;span style=&#34;color: #666666&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color: #40a070&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt; (time&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;timezone &lt;span style=&#34;color: #666666&#34;&gt;/&lt;/span&gt; &lt;span style=&#34;color: #40a070&#34;&gt;3600&lt;/span&gt;)))
+    &lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;return&lt;/span&gt; ltime, date
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/p&gt;
 
