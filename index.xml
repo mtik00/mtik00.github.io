@@ -6,7 +6,6 @@
     <description>Recent content on mtik00</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-<<<<<<< HEAD
     <lastBuildDate>Wed, 09 Sep 2015 10:16:16 -0600</lastBuildDate>
     <atom:link href="https://mtik00.com/index.xml" rel="self" type="application/rss+xml" />
     
@@ -50,12 +49,6 @@ python get-pip.py
     </item>
     
     <item>
-=======
-    <lastBuildDate>Sun, 30 Aug 2015 21:55:57 -0600</lastBuildDate>
-    <atom:link href="https://mtik00.com/index.xml" rel="self" type="application/rss+xml" />
-    
-    <item>
->>>>>>> eb99afe5809ccae6347d7f2c5ebb559f652dc8b7
       <title>Django and Cripsy Form Login with Icons</title>
       <link>https://mtik00.com/2015/08/django-and-cripsy-form-login-with-icons/</link>
       <pubDate>Sun, 30 Aug 2015 21:55:57 -0600</pubDate>
