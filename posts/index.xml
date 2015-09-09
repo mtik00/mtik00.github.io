@@ -6,8 +6,106 @@
     <description>Recent content in Posts on mtik00</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 10 Aug 2015 20:57:46 -0600</lastBuildDate>
+    <lastBuildDate>Wed, 09 Sep 2015 10:16:16 -0600</lastBuildDate>
     <atom:link href="https://mtik00.com/posts/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>virtualenvwrapper-win &#34;No module named pip&#34;</title>
+      <link>https://mtik00.com/2015/09/virtualenvwrapper-win-no-module-named-pip/</link>
+      <pubDate>Wed, 09 Sep 2015 10:16:16 -0600</pubDate>
+      
+      <guid>https://mtik00.com/2015/09/virtualenvwrapper-win-no-module-named-pip/</guid>
+      <description>&lt;p&gt;If you use virtualenvwrapper on Windows, you may have come across an issue where the environment cannot be created properly due to &amp;ldquo;ImportError: No module named pip&amp;rdquo;&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;ll let you Google the reason; here&amp;rsquo;s a fix.  Basically, you need to create the environment &lt;em&gt;without&lt;/em&gt; &lt;code&gt;setuptools&lt;/code&gt;.  Here are the basic steps:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;mkvirtualenv --no-setuptools --no-site-packages newenv&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;wget --no-check-cert https://raw.github.com/pypa/pip/master/contrib/get-pip.py&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;python get-pip.py&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;del get-pip.py&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Because I do this every so often, I&amp;rsquo;ve implemented my own &lt;code&gt;mkvirtualenv&lt;/code&gt; batch file like so:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f0f0f0&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;@&lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;off&lt;/span&gt;
+&lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;IF&lt;/span&gt; .&lt;span style=&#34;color: #bb60d5&#34;&gt;%1&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;==&lt;/span&gt; . (
+    &lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;echo&lt;/span&gt; Usage: mkvirtualenv &lt;span style=&#34;color: #4070a0&#34;&gt;&amp;#39;env name&amp;#39;&lt;/span&gt;
+    &lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;GOTO&lt;/span&gt; &lt;span style=&#34;color: #002070; font-weight: bold&#34;&gt;:eof&lt;/span&gt;
+)
+
+@&lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;on&lt;/span&gt;
+&lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;call&lt;/span&gt; C:\Python&lt;span style=&#34;color: #40a070&#34;&gt;27&lt;/span&gt;\Scripts\mkvirtualenv.bat --no-setuptools --no-site-packages &lt;span style=&#34;color: #bb60d5&#34;&gt;%1&lt;/span&gt;
+wget --no-check-cert https://raw.github.com/pypa/pip/master/contrib/get-pip.py
+python get-pip.py
+&lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;del&lt;/span&gt; get-pip.py
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;FYI: I store batch files like this in &lt;code&gt;C:\bin&lt;/code&gt;.  I then put &lt;code&gt;C:\bin&lt;/code&gt; in my path, so they&amp;rsquo;re available to all of my command-line activities.&lt;/p&gt;
+
+&lt;p&gt;The batch file is not perfect, since the path to the actual &lt;code&gt;mkvirtualenv&lt;/code&gt; is hard coded, but it&amp;rsquo;s &lt;em&gt;far&lt;/em&gt; easier than trying to store the output of something like &lt;code&gt;python -c &amp;quot;import os,sys; print os.path.join(os.path.dirname(sys.executable), &#39;Scripts&#39;, &#39;mkvirtualenv.bat&#39;)&amp;quot;&lt;/code&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Django and Cripsy Form Login with Icons</title>
+      <link>https://mtik00.com/2015/08/django-and-cripsy-form-login-with-icons/</link>
+      <pubDate>Sun, 30 Aug 2015 21:55:57 -0600</pubDate>
+      
+      <guid>https://mtik00.com/2015/08/django-and-cripsy-form-login-with-icons/</guid>
+      <description>&lt;p&gt;I recently created a website using the very nice &lt;a href=&#34;http://django-edge.readthedocs.org/en/latest/&#34;&gt;Edge&lt;/a&gt; template for a new Django site.  The log in form was nice, but I wanted a form with icons and no labels.  Here&amp;rsquo;s how I did it&amp;hellip;&lt;/p&gt;
+
+&lt;p&gt;The greatest thing is that this was a &lt;em&gt;super easy&lt;/em&gt; change.  I think it looks a lot nicer, to boot.&lt;/p&gt;
+
+&lt;p&gt;Here&amp;rsquo;s what the old login page looked like:
+
+&lt;figure &gt;
+    
+        &lt;img src=&#34;https://mtik00.com/media/login-before.png&#34; alt=&#34;Default edge login template&#34; /&gt;
+    
+    
+&lt;/figure&gt;
+&lt;/p&gt;
+
+&lt;p&gt;I used the incredible &lt;a href=&#34;http://django-crispy-forms.readthedocs.org/en/d-0/layouts.html?highlight=prependedtext&#34;&gt;&lt;code&gt;PrependedText&lt;/code&gt;&lt;/a&gt; FormHelper item to add a &lt;a href=&#34;http://fortawesome.github.io/Font-Awesome/&#34;&gt;Font Awesome&lt;/a&gt; icon before the field.  I had to set the field labels to empty-strings, as I:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Couldn&amp;rsquo;t figure out the &lt;code&gt;Field&lt;/code&gt; item to set inside &lt;code&gt;PrependedText&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Couldn&amp;rsquo;t use &lt;code&gt;self.helper.form_show_labels = False&lt;/code&gt; because I needed it for the &lt;code&gt;remember_me&lt;/code&gt; field.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Here&amp;rsquo;s the python code:
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f0f0f0&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    &lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #06287e&#34;&gt;__init__&lt;/span&gt;(&lt;span style=&#34;color: #007020&#34;&gt;self&lt;/span&gt;, &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;args, &lt;span style=&#34;color: #666666&#34;&gt;**&lt;/span&gt;kwargs):
+        &lt;span style=&#34;color: #007020&#34;&gt;super&lt;/span&gt;(LoginForm, &lt;span style=&#34;color: #007020&#34;&gt;self&lt;/span&gt;)&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;__init__(&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;args, &lt;span style=&#34;color: #666666&#34;&gt;**&lt;/span&gt;kwargs)
+        &lt;span style=&#34;color: #007020&#34;&gt;self&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;helper &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; FormHelper()
+        &lt;span style=&#34;color: #007020&#34;&gt;self&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;fields[&lt;span style=&#34;color: #4070a0&#34;&gt;&amp;quot;username&amp;quot;&lt;/span&gt;]&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;label &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #4070a0&#34;&gt;&amp;quot;&amp;quot;&lt;/span&gt;
+        &lt;span style=&#34;color: #007020&#34;&gt;self&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;fields[&lt;span style=&#34;color: #4070a0&#34;&gt;&amp;quot;password&amp;quot;&lt;/span&gt;]&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;label &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #4070a0&#34;&gt;&amp;quot;&amp;quot;&lt;/span&gt;
+        &lt;span style=&#34;color: #007020&#34;&gt;self&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;helper&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;layout &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; Layout(
+            PrependedText(&lt;span style=&#34;color: #4070a0&#34;&gt;&amp;#39;username&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color: #4070a0&#34;&gt;&amp;#39;&amp;lt;i class=&amp;quot;fa fa-envelope-o&amp;quot;&amp;gt;&amp;lt;/i&amp;gt;&amp;#39;&lt;/span&gt;, placeholder&lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #4070a0&#34;&gt;&amp;quot;Enter Email Address&amp;quot;&lt;/span&gt;),
+            PrependedText(&lt;span style=&#34;color: #4070a0&#34;&gt;&amp;#39;password&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color: #4070a0&#34;&gt;&amp;#39;&amp;lt;i class=&amp;quot;fa fa-key&amp;quot;&amp;gt;&amp;lt;/i&amp;gt;&amp;#39;&lt;/span&gt;, placeholder&lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #4070a0&#34;&gt;&amp;quot;Enter Password&amp;quot;&lt;/span&gt;),
+            HTML(&lt;span style=&#34;color: #4070a0&#34;&gt;&amp;#39;&amp;lt;a href=&amp;quot;{}&amp;quot;&amp;gt;Forgot Password?&amp;lt;/a&amp;gt;&amp;#39;&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;format(
+                reverse(&lt;span style=&#34;color: #4070a0&#34;&gt;&amp;quot;accounts:password-reset&amp;quot;&lt;/span&gt;))),
+            Field(&lt;span style=&#34;color: #4070a0&#34;&gt;&amp;#39;remember_me&amp;#39;&lt;/span&gt;),
+            Submit(&lt;span style=&#34;color: #4070a0&#34;&gt;&amp;#39;sign_in&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color: #4070a0&#34;&gt;&amp;#39;Log in&amp;#39;&lt;/span&gt;,
+                   css_class&lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #4070a0&#34;&gt;&amp;quot;btn btn-lg btn-primary btn-block&amp;quot;&lt;/span&gt;),
+        )
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Here&amp;rsquo;s the new login form:
+
+&lt;figure &gt;
+    
+        &lt;img src=&#34;https://mtik00.com/media/login-after.png&#34; alt=&#34;New log in template&#34; /&gt;
+    
+    
+&lt;/figure&gt;
+&lt;/p&gt;
+
+&lt;p&gt;The is subtle, but effective!  (I think so, anyways)&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Testing Pipelined Static Content</title>
