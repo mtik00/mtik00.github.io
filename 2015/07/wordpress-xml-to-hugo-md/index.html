@@ -32,7 +32,7 @@
   
   
 
-  <link rel="stylesheet" href="/css/redlounge-b1c79de545.css">
+  <link rel="stylesheet" href="/css/redlounge.css">
   <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
   <link href='//fonts.googleapis.com/css?family=Raleway:400,200,100,700,300,500,600,800' rel='stylesheet' type='text/css'>
   <link href='//fonts.googleapis.com/css?family=Libre+Baskerville:400,700,400italic' rel='stylesheet' type='text/css'>
@@ -49,7 +49,7 @@
 
   
 
-  <style type="text/css" title="mtik00">.social-sharing{clear:left;padding-left:2px;margin-top:.75rem;margin-bottom:.75rem}@media(min-width:48rem){.content{padding:2rem 3rem 0;margin-left:400px;min-width:400px}.content-banner-image{margin-left:25%}.header{margin:60% 2rem 0;text-align:right}.sidebar{width:400px;position:fixed;top:0;bottom:0}}.pagination{display:inline-block;padding-left:0;margin:20px 0;border-radius:4px}.pagination>li{display:inline}.pagination>li>a,.pagination>li>span{position:relative;float:left;padding:6px 12px;margin-left:-1px;line-height:1.42857143;color:#7f1000;text-decoration:none;background-color:#fff;border:1px solid #ddd}.pagination>li:first-child>a,.pagination>li:first-child>span{margin-left:0;border-top-left-radius:4px;border-bottom-left-radius:4px}.pagination>li:last-child>a,.pagination>li:last-child>span{border-top-right-radius:4px;border-bottom-right-radius:4px}.pagination>li>a:hover,.pagination>li>span:hover,.pagination>li>a:focus,.pagination>li>span:focus{z-index:3;color:#23527c;background-color:#eee;border-color:#ddd}.pagination>.active>a,.pagination>.active>span,.pagination>.active>a:hover,.pagination>.active>span:hover,.pagination>.active>a:focus,.pagination>.active>span:focus{z-index:2;color:#fff;cursor:default;background-color:#999;border-color:#337ab7}.pagination>.disabled>span,.pagination>.disabled>span:hover,.pagination>.disabled>span:focus,.pagination>.disabled>a,.pagination>.disabled>a:hover,.pagination>.disabled>a:focus{color:#777;cursor:not-allowed;background-color:#fff;border-color:#ddd}.pagination-lg>li>a,.pagination-lg>li>span{padding:10px 16px;font-size:18px;line-height:1.3333333}.pagination-lg>li:first-child>a,.pagination-lg>li:first-child>span{border-top-left-radius:6px;border-bottom-left-radius:6px}.pagination-lg>li:last-child>a,.pagination-lg>li:last-child>span{border-top-right-radius:6px;border-bottom-right-radius:6px}.pagination-sm>li>a,.pagination-sm>li>span{padding:5px 10px;font-size:12px;line-height:1.5}.pagination-sm>li:first-child>a,.pagination-sm>li:first-child>span{border-top-left-radius:3px;border-bottom-left-radius:3px}.pagination-sm>li:last-child>a,.pagination-sm>li:last-child>span{border-top-right-radius:3px;border-bottom-right-radius:3px}.paging{margin-bottom:.75rem}.paging,.paging-older,.paging-newer{clear:left;font-size:.85rem}.paging-older,.paging-newer{margin-bottom:.25rem}.paging-label{color:#999;font-style:italic}code{background-color:#eee}#primary_nav_wrap{margin-top:15px}#primary_nav_wrap ul{margin:0;padding:0;list-style:none;padding-bottom:1rem;position:relative;float:left}#primary_nav_wrap ul a{background:transparent;color:#fff;margin-top:1rem;letter-spacing:.05rem;text-transform:uppercase;font-size:.85rem;text-decoration:none;margin-right:.1rem;line-height:1.5rem}#primary_nav_wrap ul li{display:inline-block;*display:inline;zoom:1}#primary_nav_wrap ul li:hover{text-decoration:none;background:#8b8b8b}#primary_nav_wrap ul ul{display:none;position:absolute;top:20;left:0;background:#2d303b;padding:0}#primary_nav_wrap ul ul li{float:none;width:200px}#primary_nav_wrap ul li:hover>ul{display:block}</style>
+  <link rel="stylesheet" href="/css/mtik00.css">
 
 </head>
 
@@ -109,13 +109,13 @@
   
     <div>
         
-<style type="text/css" title="lunr-search">#search_box{margin:0 auto}#search_text{float:left;position:relative;left:0}#search{position:relative;left:20px}</style>
+<link rel="stylesheet" href="/css/lunr-search.css">
 
 <br><div id="search_box"><div id="search_text">Search:</div><div><input id="search" type="text"></div></div><ul id="results"></ul>
 
-<script type="text/javascript" src="/js/jquery-1.11.1.min-8101d596b2.js"></script>
-<script type="text/javascript" src="/js/lunr.min-8b8af22d38.js"></script>
-<script type="text/javascript" title="lunr-search">var lunrIndex,$results,pagesIndex;var indexfile="/js/lunr-index-fb2ece7ec7.json";var min_chars=3;function initLunr(){$.getJSON(indexfile).done(function(index){pagesIndex=index;console.log("index:",pagesIndex);lunrIndex=lunr(function(){this.field("title",10);this.field("tags",5);this.field("content",1);this.ref("href");});pagesIndex.forEach(function(page){lunrIndex.add(page);});}).fail(function(jqxhr,textStatus,error){var err=textStatus+", "+error;console.error("Error getting Hugo index flie:",err);});}function initUI(){$results=$("#results");$("#search").keyup(function(){$results.empty();var query=$(this).val();if(query.length<min_chars)return;var results=search(query);renderResults(results);});}function search(query){return lunrIndex.search(query).map(function(result){return pagesIndex.filter(function(page){return page.href===result.ref;})[0];});}function renderResults(results){if(!results.length)return;results.slice(0,10).forEach(function(result){var $result=$("<li>");$result.append($("<a>",{href:result.href,text:">> "+result.title}));$results.append($result);});}initLunr();$(document).ready(function(){initUI();});</script>
+<script type="text/javascript" src="/js/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="/js/lunr.min.js"></script>
+<script type="text/javascript" src="/js/lunr-search.js"></script>
 
     </div>
   
@@ -188,27 +188,27 @@
 
 <p>WP exports everything, but I was only concerned with the post <code>body</code>, the date it was published (<code>pubDate</code>), the <code>category</code>&rsquo;s (I called them <code>tags</code> in the script), the <code>title</code>, and where it should go.  The last part took some predetermined knowledge of how I wanted my Hugo site to be set up (read <a href="http://gohugo.io/extras/permalinks/"><code>[permalinks]</code></a>).  If you look at the exported XML file, there are <em>lots</em> of metadata that I&rsquo;m ignoring (YMMV).</p>
 
-<p><div class="highlight" style="background: #f0f0f0"><pre style="line-height: 125%">    tree <span style="color: #666666">=</span> ET<span style="color: #666666">.</span>parse(xml_path)
-    channel <span style="color: #666666">=</span> tree<span style="color: #666666">.</span>find(<span style="color: #4070a0">&quot;channel&quot;</span>)
+<p>
+    tree = ET.parse(xml_path)
+    channel = tree.find("channel")
     wp_version_check(channel)
 
-    <span style="color: #007020; font-weight: bold">for</span> post <span style="color: #007020; font-weight: bold">in</span> channel<span style="color: #666666">.</span>findall(<span style="color: #4070a0">&quot;item&quot;</span>):
-        <span style="color: #007020; font-weight: bold">print</span> <span style="color: #4070a0">&quot;post title:&quot;</span>, post<span style="color: #666666">.</span>find(<span style="color: #4070a0">&quot;title&quot;</span>)<span style="color: #666666">.</span>text
-</pre></div>
+    for post in channel.findall("item"):
+        print "post title:", post.find("title").text
 </p>
 
 <p>WP puts all of the posts in a &lt;channel&gt; element.  Each post is located inside an &lt;item&gt; element.  So far, so good!  Now all we need to do is to loop through each item and grab the data we need.</p>
 
-<p><div class="highlight" style="background: #f0f0f0"><pre style="line-height: 125%"><span style="color: #007020; font-weight: bold">def</span> <span style="color: #06287e">wp_to_hugo_date</span>(wp_date):
-    <span style="color: #4070a0; font-style: italic">&quot;&quot;&quot;Converts a UTC time string from the WordPress XML to a Hugo time string.&quot;&quot;&quot;</span>
-    date <span style="color: #666666">=</span> time<span style="color: #666666">.</span>strptime(wp_date, <span style="color: #4070a0">&quot;%a, </span><span style="color: #70a0d0; font-style: italic">%d</span><span style="color: #4070a0"> %b %Y %H:%M:%S +0000&quot;</span>)
-    date <span style="color: #666666">=</span> calendar<span style="color: #666666">.</span>timegm(date)
-    ltime <span style="color: #666666">=</span> time<span style="color: #666666">.</span>localtime(date)
-    date <span style="color: #666666">=</span> time<span style="color: #666666">.</span>strftime(<span style="color: #4070a0">&quot;%Y-%m-</span><span style="color: #70a0d0; font-style: italic">%d</span><span style="color: #4070a0">T%H:%M:%S&quot;</span>, ltime)
+<p>
+def wp_to_hugo_date(wp_date):
+    """Converts a UTC time string from the WordPress XML to a Hugo time string."""
+    date = time.strptime(wp_date, "%a, %d %b %Y %H:%M:%S +0000")
+    date = calendar.timegm(date)
+    ltime = time.localtime(date)
+    date = time.strftime("%Y-%m-%dT%H:%M:%S", ltime)
 
-    date <span style="color: #666666">+=</span> <span style="color: #4070a0">&quot;</span><span style="color: #70a0d0; font-style: italic">%+03i</span><span style="color: #4070a0">:00&quot;</span> <span style="color: #666666">%</span> (<span style="color: #666666">-</span><span style="color: #40a070">1</span> <span style="color: #666666">*</span> (time<span style="color: #666666">.</span>altzone <span style="color: #666666">/</span> <span style="color: #40a070">3600</span>) <span style="color: #007020; font-weight: bold">if</span> time<span style="color: #666666">.</span>daylight <span style="color: #007020; font-weight: bold">else</span> (<span style="color: #666666">-</span><span style="color: #40a070">1</span> <span style="color: #666666">*</span> (time<span style="color: #666666">.</span>timezone <span style="color: #666666">/</span> <span style="color: #40a070">3600</span>)))
-    <span style="color: #007020; font-weight: bold">return</span> ltime, date
-</pre></div>
+    date += "%+03i:00" % (-1 * (time.altzone / 3600) if time.daylight else (-1 * (time.timezone / 3600)))
+    return ltime, date
 </p>
 
 <p>I&rsquo;m using this function to convert the <code>pubDate</code> from WordPress to the format that Hugo uses.  Nothing real special here, although I&rsquo;m sure there&rsquo;s a much better way to calculate the time zone.  The string-formatted <code>pubDate</code> will go into the posts front matter, and I parse <code>ltime</code> to figure out where the post should go.</p>

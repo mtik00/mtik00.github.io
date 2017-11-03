@@ -32,7 +32,7 @@
   
   
 
-  <link rel="stylesheet" href="/css/redlounge-b1c79de545.css">
+  <link rel="stylesheet" href="/css/redlounge.css">
   <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
   <link href='//fonts.googleapis.com/css?family=Raleway:400,200,100,700,300,500,600,800' rel='stylesheet' type='text/css'>
   <link href='//fonts.googleapis.com/css?family=Libre+Baskerville:400,700,400italic' rel='stylesheet' type='text/css'>
@@ -49,7 +49,7 @@
 
   
 
-  <style type="text/css" title="mtik00">.social-sharing{clear:left;padding-left:2px;margin-top:.75rem;margin-bottom:.75rem}@media(min-width:48rem){.content{padding:2rem 3rem 0;margin-left:400px;min-width:400px}.content-banner-image{margin-left:25%}.header{margin:60% 2rem 0;text-align:right}.sidebar{width:400px;position:fixed;top:0;bottom:0}}.pagination{display:inline-block;padding-left:0;margin:20px 0;border-radius:4px}.pagination>li{display:inline}.pagination>li>a,.pagination>li>span{position:relative;float:left;padding:6px 12px;margin-left:-1px;line-height:1.42857143;color:#7f1000;text-decoration:none;background-color:#fff;border:1px solid #ddd}.pagination>li:first-child>a,.pagination>li:first-child>span{margin-left:0;border-top-left-radius:4px;border-bottom-left-radius:4px}.pagination>li:last-child>a,.pagination>li:last-child>span{border-top-right-radius:4px;border-bottom-right-radius:4px}.pagination>li>a:hover,.pagination>li>span:hover,.pagination>li>a:focus,.pagination>li>span:focus{z-index:3;color:#23527c;background-color:#eee;border-color:#ddd}.pagination>.active>a,.pagination>.active>span,.pagination>.active>a:hover,.pagination>.active>span:hover,.pagination>.active>a:focus,.pagination>.active>span:focus{z-index:2;color:#fff;cursor:default;background-color:#999;border-color:#337ab7}.pagination>.disabled>span,.pagination>.disabled>span:hover,.pagination>.disabled>span:focus,.pagination>.disabled>a,.pagination>.disabled>a:hover,.pagination>.disabled>a:focus{color:#777;cursor:not-allowed;background-color:#fff;border-color:#ddd}.pagination-lg>li>a,.pagination-lg>li>span{padding:10px 16px;font-size:18px;line-height:1.3333333}.pagination-lg>li:first-child>a,.pagination-lg>li:first-child>span{border-top-left-radius:6px;border-bottom-left-radius:6px}.pagination-lg>li:last-child>a,.pagination-lg>li:last-child>span{border-top-right-radius:6px;border-bottom-right-radius:6px}.pagination-sm>li>a,.pagination-sm>li>span{padding:5px 10px;font-size:12px;line-height:1.5}.pagination-sm>li:first-child>a,.pagination-sm>li:first-child>span{border-top-left-radius:3px;border-bottom-left-radius:3px}.pagination-sm>li:last-child>a,.pagination-sm>li:last-child>span{border-top-right-radius:3px;border-bottom-right-radius:3px}.paging{margin-bottom:.75rem}.paging,.paging-older,.paging-newer{clear:left;font-size:.85rem}.paging-older,.paging-newer{margin-bottom:.25rem}.paging-label{color:#999;font-style:italic}code{background-color:#eee}#primary_nav_wrap{margin-top:15px}#primary_nav_wrap ul{margin:0;padding:0;list-style:none;padding-bottom:1rem;position:relative;float:left}#primary_nav_wrap ul a{background:transparent;color:#fff;margin-top:1rem;letter-spacing:.05rem;text-transform:uppercase;font-size:.85rem;text-decoration:none;margin-right:.1rem;line-height:1.5rem}#primary_nav_wrap ul li{display:inline-block;*display:inline;zoom:1}#primary_nav_wrap ul li:hover{text-decoration:none;background:#8b8b8b}#primary_nav_wrap ul ul{display:none;position:absolute;top:20;left:0;background:#2d303b;padding:0}#primary_nav_wrap ul ul li{float:none;width:200px}#primary_nav_wrap ul li:hover>ul{display:block}</style>
+  <link rel="stylesheet" href="/css/mtik00.css">
 
 </head>
 
@@ -109,13 +109,13 @@
   
     <div>
         
-<style type="text/css" title="lunr-search">#search_box{margin:0 auto}#search_text{float:left;position:relative;left:0}#search{position:relative;left:20px}</style>
+<link rel="stylesheet" href="/css/lunr-search.css">
 
 <br><div id="search_box"><div id="search_text">Search:</div><div><input id="search" type="text"></div></div><ul id="results"></ul>
 
-<script type="text/javascript" src="/js/jquery-1.11.1.min-8101d596b2.js"></script>
-<script type="text/javascript" src="/js/lunr.min-8b8af22d38.js"></script>
-<script type="text/javascript" title="lunr-search">var lunrIndex,$results,pagesIndex;var indexfile="/js/lunr-index-fb2ece7ec7.json";var min_chars=3;function initLunr(){$.getJSON(indexfile).done(function(index){pagesIndex=index;console.log("index:",pagesIndex);lunrIndex=lunr(function(){this.field("title",10);this.field("tags",5);this.field("content",1);this.ref("href");});pagesIndex.forEach(function(page){lunrIndex.add(page);});}).fail(function(jqxhr,textStatus,error){var err=textStatus+", "+error;console.error("Error getting Hugo index flie:",err);});}function initUI(){$results=$("#results");$("#search").keyup(function(){$results.empty();var query=$(this).val();if(query.length<min_chars)return;var results=search(query);renderResults(results);});}function search(query){return lunrIndex.search(query).map(function(result){return pagesIndex.filter(function(page){return page.href===result.ref;})[0];});}function renderResults(results){if(!results.length)return;results.slice(0,10).forEach(function(result){var $result=$("<li>");$result.append($("<a>",{href:result.href,text:">> "+result.title}));$results.append($result);});}initLunr();$(document).ready(function(){initUI();});</script>
+<script type="text/javascript" src="/js/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="/js/lunr.min.js"></script>
+<script type="text/javascript" src="/js/lunr-search.js"></script>
 
     </div>
   
@@ -170,8 +170,8 @@
 
 <p>Python has many built-in packages.  That&rsquo;s the main reason it&rsquo;s my language of choice.  Python has a simple web server ready to go.  I use <code>hugo serve --watch</code> when I&rsquo;m creating my content.  When I want to check the output of my pipeline, I use the following on the command-line:</p>
 
-<p><div class="highlight" style="background: #f0f0f0"><pre style="line-height: 125%">cd <span style="color: #666666">&lt;</span>path to content<span style="color: #666666">&gt;</span> <span style="color: #666666">&amp;&amp;</span> python <span style="color: #666666">-</span>m SimpleHTTPServer <span style="color: #40a070">8000</span>
-</pre></div>
+<p>
+cd <path to content> && python -m SimpleHTTPServer 8000
 </p>
 
 <p><code>python -m SimpleHTTPServer 8000</code> tells Python to load the SimpleHTTPServer module and serve the content it finds in the current working directory on port 8000.  Technically, you are running <code>SimpleHTTPServer.__main__()</code>.</p>
@@ -179,39 +179,39 @@
 <p>The great thing about this is that I can run both the Python server and the Hugo server at the same time, depending on what I need.</p>
 
 <p>Here&rsquo;s the batch file I use for this:
-<div class="highlight" style="background: #f0f0f0"><pre style="line-height: 125%">@<span style="color: #007020; font-weight: bold">echo</span> <span style="color: #007020; font-weight: bold">off</span>
-<span style="color: #007020; font-weight: bold">cd</span> <span style="color: #bb60d5">%~dp0</span>..
 
-<span style="color: #007020; font-weight: bold">echo</span> <span style="color: #bb60d5">%1</span>|findstr /xr <span style="color: #4070a0">&quot;p&quot;</span> &gt;nul &amp;&amp; (
-  <span style="color: #007020; font-weight: bold">goto</span> <span style="color: #002070; font-weight: bold">:python</span>
+@echo off
+cd %~dp0..
+
+echo %1|findstr /xr "p" >nul && (
+  goto :python
 ) || (
-  <span style="color: #007020; font-weight: bold">goto</span> <span style="color: #002070; font-weight: bold">:hugo</span>
+  goto :hugo
 )
 
-<span style="color: #60a0b0; font-style: italic">:: =============================================================================</span>
-<span style="color: #60a0b0; font-style: italic">:: Run python on the already-built static pages.  This is for checking the end</span>
-<span style="color: #60a0b0; font-style: italic">:: result of the pipeline to ensure everything worked.</span>
-<span style="color: #002070; font-weight: bold">:python</span>
-pushd mtik<span style="color: #40a070">00</span>.github.io
-start python -m SimpleHTTPServer <span style="color: #40a070">8000</span>
+:: =============================================================================
+:: Run python on the already-built static pages.  This is for checking the end
+:: result of the pipeline to ensure everything worked.
+:python
+pushd mtik00.github.io
+start python -m SimpleHTTPServer 8000
 popd
-<span style="color: #007020; font-weight: bold">goto</span> <span style="color: #002070; font-weight: bold">:end</span>
-<span style="color: #60a0b0; font-style: italic">:: =============================================================================</span>
+goto :end
+:: =============================================================================
 
-<span style="color: #60a0b0; font-style: italic">:: =============================================================================</span>
-<span style="color: #60a0b0; font-style: italic">:: Clean the Hugo build directory, then call Hugo to serve the content</span>
-<span style="color: #002070; font-weight: bold">:hugo</span>
-<span style="color: #007020; font-weight: bold">IF</span> <span style="color: #007020; font-weight: bold">EXIST</span> build (
+:: =============================================================================
+:: Clean the Hugo build directory, then call Hugo to serve the content
+:hugo
+IF EXIST build (
     rmdir /q /s build
-    sleep <span style="color: #40a070">1</span>
+    sleep 1
 )
 
-start hugo server --watch --source<span style="color: #666666">=</span><span style="color: #4070a0">&quot;site&quot;</span> --bind<span style="color: #666666">=</span><span style="color: #4070a0">&quot;localhost&quot;</span>
-<span style="color: #007020; font-weight: bold">goto</span> <span style="color: #002070; font-weight: bold">:end</span>
-<span style="color: #60a0b0; font-style: italic">:: =============================================================================</span>
+start hugo server --watch --source="site" --bind="localhost"
+goto :end
+:: =============================================================================
 
-<span style="color: #002070; font-weight: bold">:end</span>
-</pre></div>
+:end
 </p>
 
 
