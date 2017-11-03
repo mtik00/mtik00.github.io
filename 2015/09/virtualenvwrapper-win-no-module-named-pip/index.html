@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <title>
+    virtualenvwrapper-win &#34;No module named pip&#34; // mtik00
+  </title>
+
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+<meta name="description" content="">
+<meta name="keywords" content="">
+<meta name="author" content="">
+<meta name="generator" content="Hugo 0.14" />
+
+  <meta property="og:title" content="virtualenvwrapper-win &#34;No module named pip&#34;" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:url" content="https://mtik00.com/2015/09/virtualenvwrapper-win-no-module-named-pip/" />
+
+
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/base-min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/pure-min.css">
+  
+  
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/grids-responsive-min.css">
+  
+  
+
+  <link rel="stylesheet" href="/css/redlounge.css?v2">
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href='//fonts.googleapis.com/css?family=Raleway:400,200,100,700,300,500,600,800' rel='stylesheet' type='text/css'>
+  <link href='//fonts.googleapis.com/css?family=Libre+Baskerville:400,700,400italic' rel='stylesheet' type='text/css'>
+
+  
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="mtik00" />
+
+  
+
+  
+
+  
+
+  <link rel="stylesheet" href="/css/mtik00.css?v2">
+
+</head>
+
+<body>
+	
+
+	<div id="layout" class="pure-g">
+    
+
+<div class="sidebar pure-u-1 pure-u-md-1-4">
+  <div class="header">
+    
+
+    <h1 class="brand-title">mtik00</h1>
+    <h2 class="brand-tagline">Musings on software</h2>
+
+    <nav id="primary_nav_wrap">
+      <ul>
+        
+        <li><span class="nav-item-separator">//</span><a href="https://mtik00.com">Home</a></li>
+        
+            
+                <li><span class="nav-item-separator">//</span><a href="/about/">About</a></li>
+            
+        
+            
+                <li><span class="nav-item-separator">//</span><a href="/archives/">Archives</a></li>
+            
+        
+      </ul>
+    </nav>
+
+    
+        <div class="social-buttons">
+        
+            
+                <a href="https://github.com/mtik00" target="_blank"><i class='fa fa-github fa-lg'></i></a>
+            
+        
+            
+                <a href="http://stackoverflow.com/users/3696827/mtik00" target="_blank"><i class='fa fa-stack-overflow fa-lg'></i></a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/timothymcfadden" target="_blank"><i class='fa fa-linkedin fa-lg'></i></a>
+            
+        
+            
+                <a href="http://feeds.feedburner.com/mtik00" target="_blank"><i class='fa fa-rss fa-lg'></i></a>
+            
+        
+
+        </div>
+    
+
+  </div>
+  
+    <div>
+        
+<link rel="stylesheet" href="/css/lunr-search.css?v2">
+
+<br><div id="search_box"><div id="search_text">Search:</div><div><input id="search" type="text"></div></div><ul id="results"></ul>
+
+<script type="text/javascript" src="/js/jquery-1.11.1.min.js?v2"></script>
+<script type="text/javascript" src="/js/lunr.min.js?v2"></script>
+<script type="text/javascript" src="/js/lunr-search.js?v2"></script>
+
+    </div>
+  
+</div>
+
+
+	
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+		<a name="top"></a>
+		
+
+		
+			
+	    
+  		<section class="post">
+            <h1 class="post-title">
+              <a href="/2015/09/virtualenvwrapper-win-no-module-named-pip/">virtualenvwrapper-win &#34;No module named pip&#34;</a>
+            </h1>
+            <h3 class="post-subtitle">
+            	
+            </h3>
+            
+            	<span class="post-date">
+                	<span class="post-date-day"><sup>9</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Sep</span> <span class="post-date-year">2015</span>
+            	</span>
+            	
+            
+            	
+            
+
+			
+			
+				<div class="post-categories">
+				
+					<a class="post-category post-category-python" href="https://mtik00.com/categories/python">python</a>
+				
+				</div>
+			
+
+			
+
+			
+
+            <p>If you use virtualenvwrapper on Windows, you may have come across an issue where the environment cannot be created properly due to &ldquo;ImportError: No module named pip&rdquo;</p>
+
+<p>I&rsquo;ll let you Google the reason; here&rsquo;s a fix.  Basically, you need to create the environment <em>without</em> <code>setuptools</code>.  Here are the basic steps:</p>
+
+<ol>
+<li><code>mkvirtualenv --no-setuptools --no-site-packages newenv</code></li>
+<li><code>wget --no-check-cert https://raw.github.com/pypa/pip/master/contrib/get-pip.py</code></li>
+<li><code>python get-pip.py</code></li>
+<li><code>del get-pip.py</code></li>
+</ol>
+
+<p>Because I do this every so often, I&rsquo;ve implemented my own <code>mkvirtualenv</code> batch file like so:</p>
+
+<p>
+@echo off
+IF .%1 == . (
+    echo Usage: mkvirtualenv 'env name'
+    GOTO :eof
+)
+
+@echo on
+call C:\Python27\Scripts\mkvirtualenv.bat --no-setuptools --no-site-packages %1
+wget --no-check-cert https://raw.github.com/pypa/pip/master/contrib/get-pip.py
+python get-pip.py
+del get-pip.py
+</p>
+
+<p>FYI: I store batch files like this in <code>C:\bin</code>.  I then put <code>C:\bin</code> in my path, so they&rsquo;re available to all of my command-line activities.</p>
+
+<p>The batch file is not perfect, since the path to the actual <code>mkvirtualenv</code> is hard coded, but it&rsquo;s <em>far</em> easier than trying to store the output of something like <code>python -c &quot;import os,sys; print os.path.join(os.path.dirname(sys.executable), 'Scripts', 'mkvirtualenv.bat')&quot;</code>.</p>
+
+
+			
+
+			
+
+			
+				<div class="paging">
+					<span class="paging-label">More Reading</span>
+					
+
+					
+					<div class="paging-older">
+						<span class="dark-red">Older</span><span class="decorative-marker">//</span>
+			            <a class="paging-link" href="/2015/08/django-and-cripsy-form-login-with-icons/">Django and Cripsy Form Login with Icons</a>
+		            </div>
+		            
+	            </div>
+            
+          </section>
+          
+          	<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mtik00';
+    var disqus_identifier = 'https:\/\/mtik00.com\/2015\/09\/virtualenvwrapper-win-no-module-named-pip\/';
+    var disqus_title = 'virtualenvwrapper-win \x22No module named pip\x22';
+    var disqus_url = 'https:\/\/mtik00.com\/2015\/09\/virtualenvwrapper-win-no-module-named-pip\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+          
+
+      <div class="footer">
+	<hr class="thin" />
+	<div class="pure-menu pure-menu-horizontal pure-menu-open">
+		<ul class="footer-menu">
+		
+		</ul>
+	</div>
+
+	<p><a rel='license' href='http://creativecommons.org/licenses/by-nc-sa/4.0/' target='_blank'><img alt='Creative Commons License' style='border-width:0' src='https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png' /></a><br /><span xmlns:dct='http://purl.org/dc/terms/' property='dct:title'>mtik00.com</span> by <a xmlns:cc='http://creativecommons.org/ns#' href='http://mtik00.com' property='cc:attributionName' rel='cc:attributionURL' target='_blank'>Timothy McFadden</a> is licensed under a <a rel='license' href='http://creativecommons.org/licenses/by-nc-sa/4.0/' target='_blank'>Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.</p>
+</div>
+    </div>
+  </div>
+	
+
+	
+
+  
+</body>
+</html>
