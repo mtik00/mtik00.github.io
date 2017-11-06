@@ -170,8 +170,8 @@
 
 <p>Python has many built-in packages.  That&rsquo;s the main reason it&rsquo;s my language of choice.  Python has a simple web server ready to go.  I use <code>hugo serve --watch</code> when I&rsquo;m creating my content.  When I want to check the output of my pipeline, I use the following on the command-line:</p>
 
-<p>
-cd <path to content> && python -m SimpleHTTPServer 8000
+<p><div class="highlight" style="background: #f0f0f0"><pre style="line-height: 125%"><span></span>cd <span style="color: #666666">&lt;</span>path to content<span style="color: #666666">&gt;</span> <span style="color: #666666">&amp;&amp;</span> python <span style="color: #666666">-</span>m SimpleHTTPServer <span style="color: #40a070">8000</span>
+</pre></div>
 </p>
 
 <p><code>python -m SimpleHTTPServer 8000</code> tells Python to load the SimpleHTTPServer module and serve the content it finds in the current working directory on port 8000.  Technically, you are running <code>SimpleHTTPServer.__main__()</code>.</p>
@@ -179,39 +179,39 @@ cd <path to content> && python -m SimpleHTTPServer 8000
 <p>The great thing about this is that I can run both the Python server and the Hugo server at the same time, depending on what I need.</p>
 
 <p>Here&rsquo;s the batch file I use for this:
+<div class="highlight" style="background: #f0f0f0"><pre style="line-height: 125%"><span></span>@<span style="color: #007020; font-weight: bold">echo</span> off
+<span style="color: #007020; font-weight: bold">cd</span> <span style="color: #bb60d5">%~dp0</span>..
 
-@echo off
-cd %~dp0..
-
-echo %1|findstr /xr "p" >nul && (
-  goto :python
+<span style="color: #007020; font-weight: bold">echo</span> <span style="color: #bb60d5">%1</span>|findstr /xr <span style="color: #4070a0">&quot;p&quot;</span> &gt;nul &amp;&amp; (
+  <span style="color: #007020; font-weight: bold">goto</span> :<span style="color: #002070; font-weight: bold">python</span>
 ) || (
-  goto :hugo
+  <span style="color: #007020; font-weight: bold">goto</span> :<span style="color: #002070; font-weight: bold">hugo</span>
 )
 
-:: =============================================================================
-:: Run python on the already-built static pages.  This is for checking the end
-:: result of the pipeline to ensure everything worked.
-:python
-pushd mtik00.github.io
-start python -m SimpleHTTPServer 8000
-popd
-goto :end
-:: =============================================================================
+:<span style="color: #60a0b0; font-style: italic">: =============================================================================</span>
+:<span style="color: #60a0b0; font-style: italic">: Run python on the already-built static pages.  This is for checking the end</span>
+:<span style="color: #60a0b0; font-style: italic">: result of the pipeline to ensure everything worked.</span>
+:<span style="color: #002070; font-weight: bold">python</span>
+<span style="color: #007020; font-weight: bold">pushd</span> mtik00.github.io
+<span style="color: #007020; font-weight: bold">start</span> python -m SimpleHTTPServer 8000
+<span style="color: #007020; font-weight: bold">popd</span>
+<span style="color: #007020; font-weight: bold">goto</span> :<span style="color: #002070; font-weight: bold">end</span>
+:<span style="color: #60a0b0; font-style: italic">: =============================================================================</span>
 
-:: =============================================================================
-:: Clean the Hugo build directory, then call Hugo to serve the content
-:hugo
-IF EXIST build (
-    rmdir /q /s build
+:<span style="color: #60a0b0; font-style: italic">: =============================================================================</span>
+:<span style="color: #60a0b0; font-style: italic">: Clean the Hugo build directory, then call Hugo to serve the content</span>
+:<span style="color: #002070; font-weight: bold">hugo</span>
+<span style="color: #007020; font-weight: bold">IF</span> <span style="color: #007020; font-weight: bold">EXIST</span> build (
+    <span style="color: #007020; font-weight: bold">rmdir</span> /q /s build
     sleep 1
 )
 
-start hugo server --watch --source="site" --bind="localhost"
-goto :end
-:: =============================================================================
+<span style="color: #007020; font-weight: bold">start</span> hugo server --watch --source=<span style="color: #4070a0">&quot;site&quot;</span> --bind=<span style="color: #4070a0">&quot;localhost&quot;</span>
+<span style="color: #007020; font-weight: bold">goto</span> :<span style="color: #002070; font-weight: bold">end</span>
+:<span style="color: #60a0b0; font-style: italic">: =============================================================================</span>
 
-:end
+:<span style="color: #002070; font-weight: bold">end</span>
+</pre></div>
 </p>
 
 

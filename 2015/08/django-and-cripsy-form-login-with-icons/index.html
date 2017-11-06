@@ -186,21 +186,21 @@
 </ol>
 
 <p>Here&rsquo;s the python code:
-
-    def __init__(self, *args, **kwargs):
-        super(LoginForm, self).__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.fields["username"].label = ""
-        self.fields["password"].label = ""
-        self.helper.layout = Layout(
-            PrependedText('username', '<i class="fa fa-envelope-o"></i>', placeholder="Enter Email Address"),
-            PrependedText('password', '<i class="fa fa-key"></i>', placeholder="Enter Password"),
-            HTML('<a href="{}">Forgot Password?</a>'.format(
-                reverse("accounts:password-reset"))),
-            Field('remember_me'),
-            Submit('sign_in', 'Log in',
-                   css_class="btn btn-lg btn-primary btn-block"),
+<div class="highlight" style="background: #f0f0f0"><pre style="line-height: 125%"><span></span>    <span style="color: #007020; font-weight: bold">def</span> <span style="color: #06287e">__init__</span>(<span style="color: #007020">self</span>, <span style="color: #666666">*</span>args, <span style="color: #666666">**</span>kwargs):
+        <span style="color: #007020">super</span>(LoginForm, <span style="color: #007020">self</span>)<span style="color: #666666">.</span><span style="color: #06287e">__init__</span>(<span style="color: #666666">*</span>args, <span style="color: #666666">**</span>kwargs)
+        <span style="color: #007020">self</span><span style="color: #666666">.</span>helper <span style="color: #666666">=</span> FormHelper()
+        <span style="color: #007020">self</span><span style="color: #666666">.</span>fields[<span style="color: #4070a0">&quot;username&quot;</span>]<span style="color: #666666">.</span>label <span style="color: #666666">=</span> <span style="color: #4070a0">&quot;&quot;</span>
+        <span style="color: #007020">self</span><span style="color: #666666">.</span>fields[<span style="color: #4070a0">&quot;password&quot;</span>]<span style="color: #666666">.</span>label <span style="color: #666666">=</span> <span style="color: #4070a0">&quot;&quot;</span>
+        <span style="color: #007020">self</span><span style="color: #666666">.</span>helper<span style="color: #666666">.</span>layout <span style="color: #666666">=</span> Layout(
+            PrependedText(<span style="color: #4070a0">&#39;username&#39;</span>, <span style="color: #4070a0">&#39;&lt;i class=&quot;fa fa-envelope-o&quot;&gt;&lt;/i&gt;&#39;</span>, placeholder<span style="color: #666666">=</span><span style="color: #4070a0">&quot;Enter Email Address&quot;</span>),
+            PrependedText(<span style="color: #4070a0">&#39;password&#39;</span>, <span style="color: #4070a0">&#39;&lt;i class=&quot;fa fa-key&quot;&gt;&lt;/i&gt;&#39;</span>, placeholder<span style="color: #666666">=</span><span style="color: #4070a0">&quot;Enter Password&quot;</span>),
+            HTML(<span style="color: #4070a0">&#39;&lt;a href=&quot;{}&quot;&gt;Forgot Password?&lt;/a&gt;&#39;</span><span style="color: #666666">.</span>format(
+                reverse(<span style="color: #4070a0">&quot;accounts:password-reset&quot;</span>))),
+            Field(<span style="color: #4070a0">&#39;remember_me&#39;</span>),
+            Submit(<span style="color: #4070a0">&#39;sign_in&#39;</span>, <span style="color: #4070a0">&#39;Log in&#39;</span>,
+                   css_class<span style="color: #666666">=</span><span style="color: #4070a0">&quot;btn btn-lg btn-primary btn-block&quot;</span>),
         )
+</pre></div>
 </p>
 
 <p>Here&rsquo;s the new login form:

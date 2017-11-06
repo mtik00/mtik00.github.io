@@ -209,22 +209,22 @@
 
 <p>Since your content is hosted on GitHub, you only need an Nginx configuration file that redirects.  Here&rsquo;s the configuration that I use (without the SSL setup):</p>
 
-<p>
-server {
-    server_name mtik00.com;
-    listen 443 ssl spdy;
+<p><div class="highlight" style="background: #f0f0f0"><pre style="line-height: 125%"><span></span><span style="color: #007020; font-weight: bold">server</span> {
+    <span style="color: #007020; font-weight: bold">server_name</span> <span style="color: #4070a0">mtik00.com</span>;
+    <span style="color: #007020; font-weight: bold">listen</span> <span style="color: #40a070">443</span> <span style="color: #4070a0">ssl</span> <span style="color: #4070a0">spdy</span>;
 
-    # The site is actually hosted on github pages.  Using this proxy location
-    # allows us to secure the connection with our own SSL keys, instead of the
-    # generic github.io SSL keys.
+    <span style="color: #60a0b0; font-style: italic"># The site is actually hosted on github pages.  Using this proxy location</span>
+    <span style="color: #60a0b0; font-style: italic"># allows us to secure the connection with our own SSL keys, instead of the</span>
+    <span style="color: #60a0b0; font-style: italic"># generic github.io SSL keys.</span>
 
-    location / {
-        proxy_pass https://mtik00.github.io;
-        proxy_intercept_errors on;
+    <span style="color: #007020; font-weight: bold">location</span> <span style="color: #4070a0">/</span> {
+        <span style="color: #007020; font-weight: bold">proxy_pass</span> <span style="color: #4070a0">https://mtik00.github.io</span>;
+        <span style="color: #007020; font-weight: bold">proxy_intercept_errors</span> <span style="color: #60add5">on</span>;
 
-        # allow GitHub to pass caching headers instead of using our own
-        expires off;
+        <span style="color: #60a0b0; font-style: italic"># allow GitHub to pass caching headers instead of using our own</span>
+        <span style="color: #007020; font-weight: bold">expires</span> <span style="color: #60add5">off</span>;
     }
+</pre></div>
 </p>
 
 <p>The <em>magic</em> happens when a user navigates to <a href="https://mtik00.com/">https://mtik00.com/</a>.  When the happens, the <code>location /</code> block matches, and all of the content is silently served from <a href="http://mtik00.github.io">http://mtik00.github.io</a>.  How cool is that?</p>

@@ -48,22 +48,22 @@
 
 &lt;p&gt;Since your content is hosted on GitHub, you only need an Nginx configuration file that redirects.  Here&amp;rsquo;s the configuration that I use (without the SSL setup):&lt;/p&gt;
 
-&lt;p&gt;
-server {
-    server_name mtik00.com;
-    listen 443 ssl spdy;
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f0f0f0&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;server&lt;/span&gt; {
+    &lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;server_name&lt;/span&gt; &lt;span style=&#34;color: #4070a0&#34;&gt;mtik00.com&lt;/span&gt;;
+    &lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;listen&lt;/span&gt; &lt;span style=&#34;color: #40a070&#34;&gt;443&lt;/span&gt; &lt;span style=&#34;color: #4070a0&#34;&gt;ssl&lt;/span&gt; &lt;span style=&#34;color: #4070a0&#34;&gt;spdy&lt;/span&gt;;
 
-    # The site is actually hosted on github pages.  Using this proxy location
-    # allows us to secure the connection with our own SSL keys, instead of the
-    # generic github.io SSL keys.
+    &lt;span style=&#34;color: #60a0b0; font-style: italic&#34;&gt;# The site is actually hosted on github pages.  Using this proxy location&lt;/span&gt;
+    &lt;span style=&#34;color: #60a0b0; font-style: italic&#34;&gt;# allows us to secure the connection with our own SSL keys, instead of the&lt;/span&gt;
+    &lt;span style=&#34;color: #60a0b0; font-style: italic&#34;&gt;# generic github.io SSL keys.&lt;/span&gt;
 
-    location / {
-        proxy_pass https://mtik00.github.io;
-        proxy_intercept_errors on;
+    &lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;location&lt;/span&gt; &lt;span style=&#34;color: #4070a0&#34;&gt;/&lt;/span&gt; {
+        &lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;proxy_pass&lt;/span&gt; &lt;span style=&#34;color: #4070a0&#34;&gt;https://mtik00.github.io&lt;/span&gt;;
+        &lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;proxy_intercept_errors&lt;/span&gt; &lt;span style=&#34;color: #60add5&#34;&gt;on&lt;/span&gt;;
 
-        # allow GitHub to pass caching headers instead of using our own
-        expires off;
+        &lt;span style=&#34;color: #60a0b0; font-style: italic&#34;&gt;# allow GitHub to pass caching headers instead of using our own&lt;/span&gt;
+        &lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;expires&lt;/span&gt; &lt;span style=&#34;color: #60add5&#34;&gt;off&lt;/span&gt;;
     }
+&lt;/pre&gt;&lt;/div&gt;
 &lt;/p&gt;
 
 &lt;p&gt;The &lt;em&gt;magic&lt;/em&gt; happens when a user navigates to &lt;a href=&#34;https://mtik00.com/&#34;&gt;https://mtik00.com/&lt;/a&gt;.  When the happens, the &lt;code&gt;location /&lt;/code&gt; block matches, and all of the content is silently served from &lt;a href=&#34;http://mtik00.github.io&#34;&gt;http://mtik00.github.io&lt;/a&gt;.  How cool is that?&lt;/p&gt;

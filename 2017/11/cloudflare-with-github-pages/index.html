@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <title>
+    Cloudflare with GitHub Pages // mtik00
+  </title>
+
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+<meta name="description" content="">
+<meta name="keywords" content="">
+<meta name="author" content="">
+<meta name="generator" content="Hugo 0.14" />
+
+  <meta property="og:title" content="Cloudflare with GitHub Pages" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:url" content="https://mtik00.com/2017/11/cloudflare-with-github-pages/" />
+
+
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/base-min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/pure-min.css">
+  
+  
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/grids-responsive-min.css">
+  
+  
+
+  <link rel="stylesheet" href="/css/redlounge.css?v2">
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href='//fonts.googleapis.com/css?family=Raleway:400,200,100,700,300,500,600,800' rel='stylesheet' type='text/css'>
+  <link href='//fonts.googleapis.com/css?family=Libre+Baskerville:400,700,400italic' rel='stylesheet' type='text/css'>
+
+  
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="mtik00" />
+
+  
+
+  
+
+  
+
+  <link rel="stylesheet" href="/css/mtik00.css?v2">
+
+</head>
+
+<body>
+	
+
+	<div id="layout" class="pure-g">
+    
+
+<div class="sidebar pure-u-1 pure-u-md-1-4">
+  <div class="header">
+    
+
+    <h1 class="brand-title">mtik00</h1>
+    <h2 class="brand-tagline">Musings on software</h2>
+
+    <nav id="primary_nav_wrap">
+      <ul>
+        
+        <li><span class="nav-item-separator">//</span><a href="https://mtik00.com">Home</a></li>
+        
+            
+                <li><span class="nav-item-separator">//</span><a href="/about/">About</a></li>
+            
+        
+            
+                <li><span class="nav-item-separator">//</span><a href="/archives/">Archives</a></li>
+            
+        
+      </ul>
+    </nav>
+
+    
+        <div class="social-buttons">
+        
+            
+                <a href="https://github.com/mtik00" target="_blank"><i class='fa fa-github fa-lg'></i></a>
+            
+        
+            
+                <a href="http://stackoverflow.com/users/3696827/mtik00" target="_blank"><i class='fa fa-stack-overflow fa-lg'></i></a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/timothymcfadden" target="_blank"><i class='fa fa-linkedin fa-lg'></i></a>
+            
+        
+            
+                <a href="http://feeds.feedburner.com/mtik00" target="_blank"><i class='fa fa-rss fa-lg'></i></a>
+            
+        
+
+        </div>
+    
+
+  </div>
+  
+    <div>
+        
+<link rel="stylesheet" href="/css/lunr-search.css?v2">
+
+<br><div id="search_box"><div id="search_text">Search:</div><div><input id="search" type="text"></div></div><ul id="results"></ul>
+
+<script type="text/javascript" src="/js/jquery-1.11.1.min.js?v2"></script>
+<script type="text/javascript" src="/js/lunr.min.js?v2"></script>
+<script type="text/javascript" src="/js/lunr-search.js?v2"></script>
+
+    </div>
+  
+</div>
+
+
+	
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+		<a name="top"></a>
+		
+
+		
+			
+		    <div id="toc" class="pure-u-1 pure-u-md-1-4">
+				<small class="toc-label">Contents</small>
+		   	 	<nav id="TableOfContents">
+<ul>
+<li><a href="#why:99d742c51e999a9338a91c7e4c1114b1">Why</a></li>
+<li><a href="#steps:99d742c51e999a9338a91c7e4c1114b1">Steps</a>
+<ul>
+<li><a href="#cloudflare:99d742c51e999a9338a91c7e4c1114b1">CloudFlare</a></li>
+<li><a href="#github:99d742c51e999a9338a91c7e4c1114b1">GitHub</a></li>
+<li><a href="#wait:99d742c51e999a9338a91c7e4c1114b1">Wait</a></li>
+<li><a href="#back-to-cloudflare:99d742c51e999a9338a91c7e4c1114b1">Back to CloudFlare</a></li>
+</ul></li>
+<li><a href="#ssl:99d742c51e999a9338a91c7e4c1114b1">SSL</a></li>
+<li><a href="#posting-process:99d742c51e999a9338a91c7e4c1114b1">Posting Process</a></li>
+<li><a href="#caveats:99d742c51e999a9338a91c7e4c1114b1">Caveats</a></li>
+</ul>
+</nav>
+		    </div>
+		    
+	    
+  		<section class="post">
+            <h1 class="post-title">
+              <a href="/2017/11/cloudflare-with-github-pages/">Cloudflare with GitHub Pages</a>
+            </h1>
+            <h3 class="post-subtitle">
+            	
+            </h3>
+            
+            	<span class="post-date">
+                	<span class="post-date-day"><sup>6</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Nov</span> <span class="post-date-year">2017</span>
+            	</span>
+            	
+            
+            	
+            
+
+			
+			
+				<div class="post-categories">
+				
+					<a class="post-category post-category-web" href="https://mtik00.com/categories/web">web</a>
+				
+				</div>
+			
+
+			
+
+			
+
+            
+
+<p>I recently changed my GitHub pages setup to incorporate the use of CloudFlare,
+because, why not?</p>
+
+<p>NOTE: If you don&rsquo;t have a domain, or don&rsquo;t care about CDN/Caching, the
+instructions below are pointless!  Just point people to
+<code>https://&lt;username&gt;.github.io</code>!</p>
+
+<h1 id="why:99d742c51e999a9338a91c7e4c1114b1">Why</h1>
+
+<p>In my <a href="/2015/08/nginx-proxy-for-github-pages/">
+Nginx Proxy for GitHub Pages</a> post, I explained how
+to set up your own web server using Nginx and Let&rsquo;s Encrypt to provide your
+own SSL certificate and proxy requests to GitHub.  This is fine, but it still
+adds a layer of complexity and requires your own VPS for set up.</p>
+
+<p>I was recently poking around CloudFlare.  I found out that they have a <em>free</em>
+tier that supports all kinds of neat things.  This includes a <em>shared</em> SSL
+certificate (perfectly fine for GitHub Pages content), CDN, DNS, and of course
+caching.  I&rsquo;m always up for a <em>free</em> introduction to new-to-me technologies.</p>
+
+<p>Personally, the biggest benefit is that I no longer have to deal with minimizing
+anything!  CloudFlare offers the options to minimize things for you (and
+bypass that when needed).  This means that my development workflow is quite a
+bit easier.  This pretty much negates my
+<a href="/2015/08/testing-pipelined-static-content/">
+Testing Pipelined Static Content</a> post!</p>
+
+<h1 id="steps:99d742c51e999a9338a91c7e4c1114b1">Steps</h1>
+
+<p>Full disclosure: Most of these steps are already online, so you could also
+Google them too.</p>
+
+<h2 id="cloudflare:99d742c51e999a9338a91c7e4c1114b1">CloudFlare</h2>
+
+<p>The first step was to sign up for a CloudFlare account.  That was easy.  During
+the setup procress, CloudFlare figured out all of the DNS records I was using
+(name servers, mail records, etc).  CloudFlare automatically sets them up as
+one would expect.  For example, the <code>MX</code> records were left alone (which is
+exactly what you want).  CloudFlare then tells you what to change on your
+registrar.  This makes it so all domain name lookups go through CloudFlare&rsquo;s
+DNS.</p>
+
+<h2 id="github:99d742c51e999a9338a91c7e4c1114b1">GitHub</h2>
+
+<p>The next step was to set up GitHub pages to know about our new domain.  This
+is explained
+<a href="https://help.github.com/articles/using-a-custom-domain-with-github-pages/">
+in GitHub&rsquo;s online documentation</a>.  Just a quick settings change and a new
+<code>CNAME</code> file.  One thing to note: you&rsquo;ll want to add a <code>.nojekyll</code> file to your
+pages folder if you aren&rsquo;t using Jekyll.
+<a href="https://github.com/blog/572-bypassing-jekyll-on-github-pages">(this is
+the best link I found for that)</a></p>
+
+<h2 id="wait:99d742c51e999a9338a91c7e4c1114b1">Wait</h2>
+
+<p>Now you wait!  <code>DNS</code> changes take a while to propogate through the system.  It
+took my work network a full day to pick up the change; my home network only took
+a few hours.  You&rsquo;ll know its been changed on your network when you run
+<code>nslookup &lt;domain&gt;</code> and the result points to CloudFlare DNS.</p>
+
+<h2 id="back-to-cloudflare:99d742c51e999a9338a91c7e4c1114b1">Back to CloudFlare</h2>
+
+<p>By now, you should be serving your content through CloudFlare connected to
+GitHub.  There are some settings in CloudFlare that you may want to enable:</p>
+
+<ol>
+<li><code>SSL Full</code>: On the <strong>Crypto</strong> page, you can set your <code>SSL</code> to <code>Full</code>.  This
+will encrypt the connection between CloudFlare and GitHub.  NOTE: You cannot
+use <code>Full (strict)</code> because your hostname is different from GitHub!  You&rsquo;ll
+get errors and your site won&rsquo;t work.</li>
+<li><code>Browser Cache Expiration</code>: On the <strong>Caching</strong> page, you can now set the
+cache expiration.  If you use <em>cache busting</em> techniques, you can set this
+to something in the far future, like &ldquo;6 months&rdquo; or &ldquo;1 year&rdquo;.
+<code>Always Online</code> is an interesting one too.</li>
+<li><code>Auto Minify</code>: This is a handy feature on the <strong>Speed</strong> page.  I have
+CloudFlare automatically minify my JavaScript, CSS, and HTML.</li>
+<li><code>Always Use HTTPS</code>: I like always redirecting to HTTPS.  AFter all, this is
+one of the reasons I&rsquo;m using CloudFlare.  I&rsquo;ve created a rule on the <strong>Page Rules</strong>
+page to always use https for <code>http://mtik00.com/*</code>.</li>
+</ol>
+
+<p>NOTE: These changes take affect immediately(-ish).</p>
+
+<h1 id="ssl:99d742c51e999a9338a91c7e4c1114b1">SSL</h1>
+
+<p>SSL/TLS is the biggest change.  I&rsquo;m no longer encrypting <code>mtik00.com</code> with
+Let&rsquo;s Encrypt.  This is because of 2 things:</p>
+
+<ol>
+<li>Visitors are presented with CloudFlare&rsquo;s SSL certificate</li>
+<li>CloudFlare communicates directly to GitHub using GitHub&rsquo;s SSL certificate</li>
+</ol>
+
+<p><code>mtik00.com</code> is no long providing any SSL.  That should make sense since <code>mtik00.com</code>
+is really a <em>virtual</em> thing now.  All of the content is served by GitHub and
+cached by CloudFlare.</p>
+
+<h1 id="posting-process:99d742c51e999a9338a91c7e4c1114b1">Posting Process</h1>
+
+<p>My process of creating a post is identical to before (thanks to scripting).
+The only think I took out from my deployment script was the minification of
+things.</p>
+
+<h1 id="caveats:99d742c51e999a9338a91c7e4c1114b1">Caveats</h1>
+
+<p>Here are some things to consider when choosing this method.</p>
+
+<ul>
+<li>Any DNS changes you need (e.g. <code>SPF</code>, <code>DKIM</code>, etc) will need to changed
+on CloudFlare&rsquo;s <strong>DNS</strong> settings page.</li>
+<li>Your site will <strong>NOT</strong> use your certificate (unless you pay CloudFlare to
+manage one).  This is not the solution to use a domain-verified certificate.</li>
+<li>This is mainly <em>fire and forget</em>.  Don&rsquo;t forget how things are set up!</li>
+</ul>
+
+
+			
+
+			
+
+			
+				<div class="paging">
+					<span class="paging-label">More Reading</span>
+					
+
+					
+					<div class="paging-older">
+						<span class="dark-red">Older</span><span class="decorative-marker">//</span>
+			            <a class="paging-link" href="/2015/09/virtualenvwrapper-win-no-module-named-pip/">virtualenvwrapper-win &#34;No module named pip&#34;</a>
+		            </div>
+		            
+	            </div>
+            
+          </section>
+          
+          	<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mtik00';
+    var disqus_identifier = 'https:\/\/mtik00.com\/2017\/11\/cloudflare-with-github-pages\/';
+    var disqus_title = 'Cloudflare with GitHub Pages';
+    var disqus_url = 'https:\/\/mtik00.com\/2017\/11\/cloudflare-with-github-pages\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+          
+
+      <div class="footer">
+	<hr class="thin" />
+	<div class="pure-menu pure-menu-horizontal pure-menu-open">
+		<ul class="footer-menu">
+		
+		</ul>
+	</div>
+
+	<p><a rel='license' href='http://creativecommons.org/licenses/by-nc-sa/4.0/' target='_blank'><img alt='Creative Commons License' style='border-width:0' src='https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png' /></a><br /><span xmlns:dct='http://purl.org/dc/terms/' property='dct:title'>mtik00.com</span> by <a xmlns:cc='http://creativecommons.org/ns#' href='http://mtik00.com' property='cc:attributionName' rel='cc:attributionURL' target='_blank'>Timothy McFadden</a> is licensed under a <a rel='license' href='http://creativecommons.org/licenses/by-nc-sa/4.0/' target='_blank'>Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.</p>
+</div>
+    </div>
+  </div>
+	
+
+	
+
+  
+</body>
+</html>

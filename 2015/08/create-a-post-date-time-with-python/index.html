@@ -166,8 +166,8 @@
 
 <p>If you have Python installed on your system, here&rsquo;s a quick one-liner to print out the current <a href="https://docs.python.org/2/library/time.html?highlight=time.strftime#time.strftime">date/time</a> in Hugo&rsquo;s (really Go&rsquo;s) format:</p>
 
-<p>
-python -c "import time; print time.strftime('%Y-%m-%dT%H:%M:%S', time.localtime()) + '%+03i:00' % (-1*(time.altzone / 3600) if time.daylight else (-1*(time.timezone/3600)));"
+<p><div class="highlight" style="background: #f0f0f0"><pre style="line-height: 125%"><span></span>python <span style="color: #666666">-</span>c <span style="color: #4070a0">&quot;import time; print time.strftime(&#39;%Y-%m-</span><span style="color: #70a0d0; font-style: italic">%d</span><span style="color: #4070a0">T%H:%M:%S&#39;, time.localtime()) + &#39;</span><span style="color: #70a0d0; font-style: italic">%+03i</span><span style="color: #4070a0">:00&#39; % (-1*(time.altzone / 3600) if time.daylight else (-1*(time.timezone/3600)));&quot;</span>
+</pre></div>
 </p>
 
 <p>I have that line wrapped in a batch file that I can run called <code>htime.bat</code>.</p>

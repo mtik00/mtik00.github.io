@@ -173,18 +173,18 @@
 
 <p>Because I do this every so often, I&rsquo;ve implemented my own <code>mkvirtualenv</code> batch file like so:</p>
 
-<p>
-@echo off
-IF .%1 == . (
-    echo Usage: mkvirtualenv 'env name'
-    GOTO :eof
+<p><div class="highlight" style="background: #f0f0f0"><pre style="line-height: 125%"><span></span>@<span style="color: #007020; font-weight: bold">echo</span> off
+<span style="color: #007020; font-weight: bold">IF</span> .<span style="color: #bb60d5">%1</span> <span style="color: #666666">==</span> . (
+    <span style="color: #007020; font-weight: bold">echo</span> Usage: mkvirtualenv &#39;env name&#39;
+    <span style="color: #007020; font-weight: bold">GOTO</span> :<span style="color: #002070; font-weight: bold">eof</span>
 )
 
-@echo on
-call C:\Python27\Scripts\mkvirtualenv.bat --no-setuptools --no-site-packages %1
+@<span style="color: #007020; font-weight: bold">echo</span> on
+<span style="color: #007020; font-weight: bold">call</span> C:\Python27\Scripts\mkvirtualenv.bat --no-setuptools --no-site-packages <span style="color: #bb60d5">%1</span>
 wget --no-check-cert https://raw.github.com/pypa/pip/master/contrib/get-pip.py
 python get-pip.py
-del get-pip.py
+<span style="color: #007020; font-weight: bold">del</span> get-pip.py
+</pre></div>
 </p>
 
 <p>FYI: I store batch files like this in <code>C:\bin</code>.  I then put <code>C:\bin</code> in my path, so they&rsquo;re available to all of my command-line activities.</p>
@@ -200,6 +200,11 @@ del get-pip.py
 				<div class="paging">
 					<span class="paging-label">More Reading</span>
 					
+					<div class="paging-newer">
+						<span class="dark-red">Newer</span><span class="decorative-marker">//</span>
+						<a class="paging-link" href="/2017/11/cloudflare-with-github-pages/">Cloudflare with GitHub Pages</a>
+		            </div>
+		            
 
 					
 					<div class="paging-older">

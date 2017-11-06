@@ -188,27 +188,27 @@
 
 <p>WP exports everything, but I was only concerned with the post <code>body</code>, the date it was published (<code>pubDate</code>), the <code>category</code>&rsquo;s (I called them <code>tags</code> in the script), the <code>title</code>, and where it should go.  The last part took some predetermined knowledge of how I wanted my Hugo site to be set up (read <a href="http://gohugo.io/extras/permalinks/"><code>[permalinks]</code></a>).  If you look at the exported XML file, there are <em>lots</em> of metadata that I&rsquo;m ignoring (YMMV).</p>
 
-<p>
-    tree = ET.parse(xml_path)
-    channel = tree.find("channel")
+<p><div class="highlight" style="background: #f0f0f0"><pre style="line-height: 125%"><span></span>    tree <span style="color: #666666">=</span> ET<span style="color: #666666">.</span>parse(xml_path)
+    channel <span style="color: #666666">=</span> tree<span style="color: #666666">.</span>find(<span style="color: #4070a0">&quot;channel&quot;</span>)
     wp_version_check(channel)
 
-    for post in channel.findall("item"):
-        print "post title:", post.find("title").text
+    <span style="color: #007020; font-weight: bold">for</span> post <span style="color: #007020; font-weight: bold">in</span> channel<span style="color: #666666">.</span>findall(<span style="color: #4070a0">&quot;item&quot;</span>):
+        <span style="color: #007020; font-weight: bold">print</span> <span style="color: #4070a0">&quot;post title:&quot;</span>, post<span style="color: #666666">.</span>find(<span style="color: #4070a0">&quot;title&quot;</span>)<span style="color: #666666">.</span>text
+</pre></div>
 </p>
 
 <p>WP puts all of the posts in a &lt;channel&gt; element.  Each post is located inside an &lt;item&gt; element.  So far, so good!  Now all we need to do is to loop through each item and grab the data we need.</p>
 
-<p>
-def wp_to_hugo_date(wp_date):
-    """Converts a UTC time string from the WordPress XML to a Hugo time string."""
-    date = time.strptime(wp_date, "%a, %d %b %Y %H:%M:%S +0000")
-    date = calendar.timegm(date)
-    ltime = time.localtime(date)
-    date = time.strftime("%Y-%m-%dT%H:%M:%S", ltime)
+<p><div class="highlight" style="background: #f0f0f0"><pre style="line-height: 125%"><span></span><span style="color: #007020; font-weight: bold">def</span> <span style="color: #06287e">wp_to_hugo_date</span>(wp_date):
+    <span style="color: #4070a0; font-style: italic">&quot;&quot;&quot;Converts a UTC time string from the WordPress XML to a Hugo time string.&quot;&quot;&quot;</span>
+    date <span style="color: #666666">=</span> time<span style="color: #666666">.</span>strptime(wp_date, <span style="color: #4070a0">&quot;%a, </span><span style="color: #70a0d0; font-style: italic">%d</span><span style="color: #4070a0"> %b %Y %H:%M:%S +0000&quot;</span>)
+    date <span style="color: #666666">=</span> calendar<span style="color: #666666">.</span>timegm(date)
+    ltime <span style="color: #666666">=</span> time<span style="color: #666666">.</span>localtime(date)
+    date <span style="color: #666666">=</span> time<span style="color: #666666">.</span>strftime(<span style="color: #4070a0">&quot;%Y-%m-</span><span style="color: #70a0d0; font-style: italic">%d</span><span style="color: #4070a0">T%H:%M:%S&quot;</span>, ltime)
 
-    date += "%+03i:00" % (-1 * (time.altzone / 3600) if time.daylight else (-1 * (time.timezone / 3600)))
-    return ltime, date
+    date <span style="color: #666666">+=</span> <span style="color: #4070a0">&quot;</span><span style="color: #70a0d0; font-style: italic">%+03i</span><span style="color: #4070a0">:00&quot;</span> <span style="color: #666666">%</span> (<span style="color: #666666">-</span><span style="color: #40a070">1</span> <span style="color: #666666">*</span> (time<span style="color: #666666">.</span>altzone <span style="color: #666666">/</span> <span style="color: #40a070">3600</span>) <span style="color: #007020; font-weight: bold">if</span> time<span style="color: #666666">.</span>daylight <span style="color: #007020; font-weight: bold">else</span> (<span style="color: #666666">-</span><span style="color: #40a070">1</span> <span style="color: #666666">*</span> (time<span style="color: #666666">.</span>timezone <span style="color: #666666">/</span> <span style="color: #40a070">3600</span>)))
+    <span style="color: #007020; font-weight: bold">return</span> ltime, date
+</pre></div>
 </p>
 
 <p>I&rsquo;m using this function to convert the <code>pubDate</code> from WordPress to the format that Hugo uses.  Nothing real special here, although I&rsquo;m sure there&rsquo;s a much better way to calculate the time zone.  The string-formatted <code>pubDate</code> will go into the posts front matter, and I parse <code>ltime</code> to figure out where the post should go.</p>
