@@ -50,8 +50,6 @@
   
 
   <link rel="stylesheet" href="/css/mtik00.css?v3">
-<meta http-equiv="Content-Security-Policy"
-    content="default-src 'self' https://*.twitter.com:* https://*.disquscdn.com https://*.services.disqus.com:* 'unsafe-inline' https://cdn.syndication.twimg.com/tweets.json https://connect.facebook.net/en_US/sdk.js https://referrer.disqus.com/juggler/ https://apis.google.com https://ssl.google-analytics.com https://disqus.com;">
 </head>
 
 <body>
@@ -223,20 +221,25 @@ python get-pip.py
           </section>
           
           	<div id="disqus_thread"></div>
-<script type="text/javascript">
-    var disqus_shortname = 'mtik00';
-    var disqus_identifier = 'https:\/\/mtik00.com\/2015\/09\/virtualenvwrapper-win-no-module-named-pip\/';
-    var disqus_title = 'virtualenvwrapper-win \x22No module named pip\x22';
-    var disqus_url = 'https:\/\/mtik00.com\/2015\/09\/virtualenvwrapper-win-no-module-named-pip\/';
+<script>
+    
 
-    (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    
+    var disqus_config = function () {
+        this.page.url = "https://mtik00.com";  
+        this.page.identifier = "mtik00"; 
+    };
+    
+    (function() {  
+        var d = document, s = d.createElement('script');
+        
+        s.src = 'https://mtik00.disqus.com/embed.js';
+        
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
     })();
 </script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
           
 
       <div class="footer">
