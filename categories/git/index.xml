@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Git on mtik00</title>
+    <link>https://mtik00.com/categories/git/</link>
+    <description>Recent content in Git on mtik00</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 07 Nov 2017 16:14:47 -0700</lastBuildDate>
+    <atom:link href="https://mtik00.com/categories/git/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Windows, Git, and SSH Keys</title>
+      <link>https://mtik00.com/2017/11/windows-git-and-ssh-keys/</link>
+      <pubDate>Tue, 07 Nov 2017 16:14:47 -0700</pubDate>
+      
+      <guid>https://mtik00.com/2017/11/windows-git-and-ssh-keys/</guid>
+      <description>
+
+&lt;p&gt;&lt;code&gt;Git&lt;/code&gt; has the ability to use SSH keys in order to authenticate communications
+with a remote server.  This is a magical thing!  Depending on how you set it
+up, you may never have to enter your password again.&lt;/p&gt;
+
+&lt;p&gt;You may find differing opinions, of course.  My suggestion is to store
+&lt;em&gt;password-less&lt;/em&gt; keys securely on your development system.  This may seem like
+a bad idea, but it&amp;rsquo;s a pretty common thing to do to make your life easier.&lt;/p&gt;
+
+&lt;p&gt;If your laptop/desktop ever gets stolen, it&amp;rsquo;s pretty easy to revoke it&amp;rsquo;s key.&lt;/p&gt;
+
+&lt;h1 id=&#34;generating-keys:cce5ea14931aa06e9fcfd6a79e417c6d&#34;&gt;Generating Keys&lt;/h1&gt;
+
+&lt;p&gt;I do 99% of my development on my Windows computer.  Windows doesn&amp;rsquo;t have any
+built-in SSH functionality (we&amp;rsquo;re not talking about &lt;code&gt;WSL&lt;/code&gt; right now).  That
+means that you will wind up installing &lt;code&gt;PuTTY&lt;/code&gt;.  It&amp;rsquo;s ok&amp;hellip; everybody&amp;rsquo;s doing
+it!&lt;/p&gt;
+
+&lt;p&gt;I like to store my SSH keys in my profile directory.  This will make your life
+&lt;em&gt;a lot&lt;/em&gt; easier.  The keys will also be slightly protected with your Windows
+login information.  &lt;code&gt;%USERPROFILE%&lt;/code&gt; is also the default place were utilities
+will look for your SSH config file.&lt;/p&gt;
+
+&lt;p&gt;In a command Window, type: &lt;code&gt;mkdir %USERPROFILE%\.ssh&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Generate your first key:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Open up &lt;code&gt;PuTTYGen&lt;/code&gt; (might be in your &lt;em&gt;Start menu&lt;/em&gt; if you installed it like that)&lt;/li&gt;
+&lt;li&gt;The default settings of &lt;code&gt;2048 RSA&lt;/code&gt; should be ok&lt;/li&gt;
+&lt;li&gt;Press the &lt;strong&gt;Generate&lt;/strong&gt; button&lt;/li&gt;
+&lt;li&gt;Move your mouse over the window to &lt;em&gt;generate some randomness&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;Export these things to your &lt;code&gt;%USERPROFILE%\.ssh&lt;/code&gt; folder (you can ignore the &lt;em&gt;without a passphrase&lt;/em&gt; warnings):
+
+&lt;ul&gt;
+&lt;li&gt;Press &lt;strong&gt;Save private key&lt;/strong&gt;: This will save a file with a &lt;code&gt;.ppk&lt;/code&gt; extension.
+This is your private key; keep it safe!  This should stay on your dev
+machine.&lt;br /&gt;
+For this example, name this &lt;code&gt;devmachine.ppk&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;From the menu, select &lt;strong&gt;Conversions -&amp;gt; Export OpenSSH Key&lt;/strong&gt;:  This is
+your private key exported into something that &lt;code&gt;git&lt;/code&gt; will use.&lt;br /&gt;
+For this example, name this &lt;code&gt;devmachine-openssh-private.txt&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Keep the Window open&amp;hellip; the &lt;em&gt;Public key for pasting&lt;/em&gt; is important for
+a later step.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Here&amp;rsquo;s a screenshot of my screen after I generated the key:&lt;/p&gt;
+
+&lt;p&gt;
+&lt;figure &gt;
+    
+        &lt;img src=&#34;https://mtik00.com/media/puttygen.png&#34; alt=&#34;PuTTY Gen key generated&#34; /&gt;
+    
+    
+&lt;/figure&gt;
+&lt;/p&gt;
+
+&lt;h2 id=&#34;userprofile-ssh-config:cce5ea14931aa06e9fcfd6a79e417c6d&#34;&gt;%USERPROFILE%.ssh\config&lt;/h2&gt;
+
+&lt;p&gt;The SSH utilities that &lt;em&gt;don&amp;rsquo;t&lt;/em&gt; use the &lt;code&gt;.ppk&lt;/code&gt; directly will want to use the
+&lt;code&gt;devmachine-openssh-private.txt&lt;/code&gt; file that you exported above.  The easiest
+way to do this is to create a &lt;code&gt;config&lt;/code&gt; file that tells the utilities which
+keys to use for which hosts.&lt;/p&gt;
+
+&lt;p&gt;Run the following command from the command line:
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f0f0f0&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;type&lt;/span&gt; NUL &amp;gt; &lt;span style=&#34;color: #bb60d5&#34;&gt;%USERPROFILE%&lt;/span&gt;\.ssh\config
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;This will create an emtpy file.  Now open that file up in your favorite text
+editor.  Here&amp;rsquo;s a sample configuration for &lt;code&gt;github.com&lt;/code&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f0f0f0&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;Host github.com
+    StrictHostKeyChecking no
+    IdentityFile C:\Users\myusername\.ssh\devmachine-openssh-private.txt
+&lt;/pre&gt;&lt;/div&gt;
+
+(replace &lt;code&gt;myusername&lt;/code&gt; with your user name)&lt;/p&gt;
+
+&lt;p&gt;All utilities that support this kind of thing, such as &lt;code&gt;git&lt;/code&gt;, will automatically
+use this configuration to log in to the remote system (&lt;code&gt;github.com&lt;/code&gt;, in this
+case).&lt;/p&gt;
+
+&lt;p&gt;NOTE: This format of &lt;code&gt;.ssh/config&lt;/code&gt; is the same for both Windows and Linux.&lt;/p&gt;
+
+&lt;h1 id=&#34;github:cce5ea14931aa06e9fcfd6a79e417c6d&#34;&gt;GitHub&lt;/h1&gt;
+
+&lt;p&gt;We&amp;rsquo;re using GitHub in this example, but this holds true for any other remote
+host that supports SSH keys (even Linux systems).&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Go into your &lt;strong&gt;Settings&lt;/strong&gt;, and select &lt;strong&gt;SSH and GPG keys&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Press the &lt;strong&gt;New SSH key&lt;/strong&gt; button&lt;/li&gt;
+&lt;li&gt;Give it an appropriate &lt;strong&gt;Title&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Remember the &lt;code&gt;PuTTYGen&lt;/code&gt; window you kept open?  Copy the text in the &lt;strong&gt;Public
+key for pasting&amp;hellip;&lt;/strong&gt; section (right click, select &lt;em&gt;Select all&lt;/em&gt;, then right
+click and select &lt;em&gt;Copy&lt;/em&gt;)&lt;/li&gt;
+&lt;li&gt;Paste that text into the GitHub page were it says &lt;strong&gt;Key&lt;/strong&gt;.&lt;br /&gt;
+NOTE: The thing you copy/paste should start with &lt;code&gt;ssh-rsa&lt;/code&gt; and probably
+end with &lt;code&gt;== rsa-key-20171107&lt;/code&gt; (the numbers would change)&lt;/li&gt;
+&lt;li&gt;Press the *&lt;em&gt;Add SSH key&lt;/em&gt; button at the bottom of the form.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;That&amp;rsquo;s it!  Now you can use &lt;code&gt;git clone&lt;/code&gt; to clone your repo using the &lt;strong&gt;Clone
+with SSH&lt;/strong&gt; option.  That will also give you the ability to use &lt;code&gt;git pull&lt;/code&gt; and
+&lt;code&gt;git push&lt;/code&gt; without entering in your password.&lt;/p&gt;
+
+&lt;h1 id=&#34;bonus-linux-server:cce5ea14931aa06e9fcfd6a79e417c6d&#34;&gt;Bonus: Linux Server&lt;/h1&gt;
+
+&lt;p&gt;Have a Linux server already using SSH?  Great news, you can follow the same
+basic steps to allow password-less connections!&lt;/p&gt;
+
+&lt;p&gt;GitHub gave us a nice web interface to add the keys.  No such luck in Linux
+(depending on what you think of GUIs).  Still, its a relatively simple process.&lt;/p&gt;
+
+&lt;p&gt;NOTE: These directions really depend on how &lt;code&gt;sshd&lt;/code&gt; is configured; the directions
+below are most common.&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;mkdir -p ~/.ssh&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;vim ~/.ssh/authorized_keys&lt;/code&gt; (or use a command-line editor your familiar with)&lt;/li&gt;
+&lt;li&gt;Add in the same text you pasted into GitHub (&lt;code&gt;ssh-rsa.....== rsa...&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;Save the file&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;IMPORTANT&lt;/strong&gt;: Change the permissions: &lt;code&gt;chmod -R 600 ~/.ssh&lt;/code&gt; (things may not
+work without this)&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Back on your Windows machine, make another entry in &lt;code&gt;%USERPROFILE%\.ssh\config&lt;/code&gt;
+that points to your Linux server.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
