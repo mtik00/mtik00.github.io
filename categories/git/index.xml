@@ -81,8 +81,9 @@ a later step.&lt;/li&gt;
 way to do this is to create a &lt;code&gt;config&lt;/code&gt; file that tells the utilities which
 keys to use for which hosts.&lt;/p&gt;
 
-&lt;p&gt;Run the following command from the command line:
-&lt;div class=&#34;highlight&#34; style=&#34;background: #f0f0f0&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;type&lt;/span&gt; NUL &amp;gt; &lt;span style=&#34;color: #bb60d5&#34;&gt;%USERPROFILE%&lt;/span&gt;\.ssh\config
+&lt;p&gt;Run the following command from the command line (careful here, don&amp;rsquo;t delete
+the file if it&amp;rsquo;s already there!):
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f0f0f0&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;type&lt;/span&gt; NUL &amp;gt;&amp;gt; &lt;span style=&#34;color: #bb60d5&#34;&gt;%USERPROFILE%&lt;/span&gt;\.ssh\config
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/p&gt;
 
