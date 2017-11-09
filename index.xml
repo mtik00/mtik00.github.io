@@ -6,8 +6,218 @@
     <description>Recent content on mtik00</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 07 Nov 2017 16:14:47 -0700</lastBuildDate>
+    <lastBuildDate>Thu, 09 Nov 2017 14:52:30 -0700</lastBuildDate>
     <atom:link href="https://mtik00.com/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Jinja2 Cache Busting URLs in Python</title>
+      <link>https://mtik00.com/2017/11/jinja2-cache-busting-urls/</link>
+      <pubDate>Thu, 09 Nov 2017 14:52:30 -0700</pubDate>
+      
+      <guid>https://mtik00.com/2017/11/jinja2-cache-busting-urls/</guid>
+      <description>
+
+&lt;p&gt;Cache busting is a technique the gives web developers a compromise between
+asset load speeds and new features.  In this article,
+we&amp;rsquo;ll discuss a &lt;em&gt;pure Python&lt;/em&gt; way of implementing this feature in your Jinja2
+templates.&lt;/p&gt;
+
+&lt;h1 id=&#34;what-is-caching:32848604b4bca00ae54abd221a684de4&#34;&gt;What is &amp;ldquo;caching&amp;rdquo;&lt;/h1&gt;
+
+&lt;p&gt;NOTE: This article will not cover HTML cache headers, proxy settings, etc.&lt;/p&gt;
+
+&lt;p&gt;Everything you see on a web page is &lt;em&gt;loaded&lt;/em&gt; from somewhere.  That &amp;ldquo;somewhere&amp;rdquo;
+could be a VPS in the cloud, a &lt;a href=&#34;https://en.wikipedia.org/wiki/Content_delivery_network&#34;&gt;CDN&lt;/a&gt;
+service like &lt;a href=&#34;https://www.cloudflare.com/&#34;&gt;CloudFlare&lt;/a&gt;, your machine, and so
+on.  We&amp;rsquo;ll call these things &amp;ldquo;assets&amp;rdquo;.  Assets are images and text files used
+to tell your browser how the page you are looking at should look.  These are
+mostly things that don&amp;rsquo;t really change too often.&lt;/p&gt;
+
+&lt;p&gt;Since assets don&amp;rsquo;t change often, you can &lt;em&gt;really&lt;/em&gt; speed up page loading by using
+something called &amp;ldquo;cache&amp;rdquo;.  Serving files from the webserver can be really slow,
+especially if it&amp;rsquo;s a very popular website, or your internet connection is slow.
+The good news is that if you have visited that page recently, some or all of
+the assets will already be on your computer.&lt;/p&gt;
+
+&lt;p&gt;This all happens without much input from you, the user.  Your browser will
+cache by default (unless using something like Tor Browser).  Even if you have
+your browser cache disabled, the assets may be cached by a service like
+&lt;a href=&#34;https://www.cloudflare.com/&#34;&gt;CloudFlare&lt;/a&gt;.  That&amp;rsquo;s out of your control.&lt;/p&gt;
+
+&lt;p&gt;Quick loading is great, but what happens when the version of
+&lt;code&gt;cute-puppy.jpg&lt;/code&gt; you have in your cache is different from what&amp;rsquo;s on the server?
+You&amp;rsquo;ll continue to see the same old boring puppy image.
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Fear_of_missing_out&#34;&gt;FOMO&lt;/a&gt; anyone?&lt;/p&gt;
+
+&lt;p&gt;There&amp;rsquo;s also evidence that search engines prioritize websites that use very
+long cache times (e.g. Google&amp;rsquo;s own Page Insights tool).  A nice article on
+how caching works can be found here: &lt;a href=&#34;https://jakearchibald.com/2016/caching-best-practices/&#34;&gt;https://jakearchibald.com/2016/caching-best-practices/&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;busting-the-cache:32848604b4bca00ae54abd221a684de4&#34;&gt;Busting the cache&lt;/h1&gt;
+
+&lt;p&gt;Web developers use a technique called &amp;ldquo;cache busting&amp;rdquo; to ensure that any
+change to &lt;code&gt;cute-puppy.jpg&lt;/code&gt; is immediately seen by users.  They get around any
+&amp;ldquo;cache&amp;rdquo; mechanism by generally taking 1 of these approaches:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Change the filename: Instead of &lt;code&gt;cute-puppy.jpg&lt;/code&gt;, they&amp;rsquo;ll use something
+like &lt;code&gt;cute-puppy-v1.jpg&lt;/code&gt;.  If the change the content, they&amp;rsquo;ll change
+the name to &lt;code&gt;cute-puppy-v2.jpg&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Change the URL: Instead of using &lt;code&gt;/static/images/cute-puppy.jpg&lt;/code&gt; in
+HTML, they&amp;rsquo;ll use something like &lt;code&gt;/static/images/cute-puppy.jpg?v1&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The idea is the same.  Any change a developer makes to the &lt;em&gt;&amp;ldquo;asset&amp;rdquo;&lt;/em&gt; will cause
+viewers to download the updated file.&lt;/p&gt;
+
+&lt;p&gt;I prefer the second method.  I think this is cleaner, and causes less overall
+churn in my source code control.&lt;/p&gt;
+
+&lt;h1 id=&#34;pre-calculate-vs-jit:32848604b4bca00ae54abd221a684de4&#34;&gt;Pre-calculate vs JIT&lt;/h1&gt;
+
+&lt;p&gt;The way I see it, you have two options here: 1) Use a build step to version your
+assets; 2) perform a &amp;ldquo;just in time&amp;rdquo; calculation when the resource is requested.
+This really depends on your process, but I don&amp;rsquo;t see a downside to pre-calculating a version.
+This method should also perform much better under load.  Admittedly, I&amp;rsquo;m too lazy to measure
+it, so &lt;a href=&#34;https://en.wiktionary.org/wiki/YMMV&#34;&gt;YMMV&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;I decided to create a script that calculated the &lt;a href=&#34;https://en.wikipedia.org/wiki/Cyclic_redundancy_check&#34;&gt;CRC32&lt;/a&gt;
+for each of my static images and store the result in a JSON file.  I load that
+file at the start of my script.  This works great!  It does, however, cause a
+lookup to occur each time the Jinja2 template is &lt;em&gt;rendered&lt;/em&gt;.  Jinja2 is pretty
+good a caching rendered templates (moar cache!), so I think that&amp;rsquo;s fine.&lt;/p&gt;
+
+&lt;p&gt;NOTE: You could also dynamically create this table at application start.  I
+chose not to just to keep the start process simple and clean.&lt;/p&gt;
+
+&lt;p&gt;Here&amp;rsquo;s my Python function to calculate the
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Cyclic_redundancy_check&#34;&gt;CRC32&lt;/a&gt; for each of my
+images:
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f0f0f0&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0e84b5; font-weight: bold&#34;&gt;zlib&lt;/span&gt;
+&lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #06287e&#34;&gt;build&lt;/span&gt;():
+    &lt;span style=&#34;color: #4070a0; font-style: italic&#34;&gt;&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+&lt;span style=&#34;color: #4070a0; font-style: italic&#34;&gt;    Builds the release files&lt;/span&gt;
+&lt;span style=&#34;color: #4070a0; font-style: italic&#34;&gt;    &amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+    &lt;span style=&#34;color: #60a0b0; font-style: italic&#34;&gt;# Calculates and stores the CRC32 for all images in &amp;#39;static/images&amp;#39;&lt;/span&gt;
+    outfile &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; os&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;path&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;join(THIS_DIR, &lt;span style=&#34;color: #4070a0&#34;&gt;&amp;#39;app&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color: #4070a0&#34;&gt;&amp;#39;cachbuster.json&amp;#39;&lt;/span&gt;)
+    image_dir &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; os&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;path&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;join(THIS_DIR, &lt;span style=&#34;color: #4070a0&#34;&gt;&amp;#39;html&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color: #4070a0&#34;&gt;&amp;#39;static&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color: #4070a0&#34;&gt;&amp;#39;images&amp;#39;&lt;/span&gt;)
+    result &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; {}
+    &lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;for&lt;/span&gt; root, dirs, files &lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;in&lt;/span&gt; os&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;walk(image_dir):
+        &lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;for&lt;/span&gt; fname &lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;in&lt;/span&gt; files:
+            fpath &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; root &lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color: #4070a0&#34;&gt;&amp;#39;/&amp;#39;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; fname
+            relpath &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; fpath[&lt;span style=&#34;color: #007020&#34;&gt;len&lt;/span&gt;(image_dir) &lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color: #40a070&#34;&gt;1&lt;/span&gt;:]&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;replace(&lt;span style=&#34;color: #4070a0&#34;&gt;&amp;#39;&lt;/span&gt;&lt;span style=&#34;color: #4070a0; font-weight: bold&#34;&gt;\\&lt;/span&gt;&lt;span style=&#34;color: #4070a0&#34;&gt;&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color: #4070a0&#34;&gt;&amp;#39;/&amp;#39;&lt;/span&gt;)
+            prev &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #40a070&#34;&gt;0&lt;/span&gt;
+            &lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;for&lt;/span&gt; line &lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color: #007020&#34;&gt;open&lt;/span&gt;(fpath, &lt;span style=&#34;color: #4070a0&#34;&gt;&amp;#39;rb&amp;#39;&lt;/span&gt;):
+                prev &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; zlib&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;crc32(line, prev)
+            result[relpath] &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #4070a0&#34;&gt;&amp;#39;&lt;/span&gt;&lt;span style=&#34;color: #70a0d0; font-style: italic&#34;&gt;%x&lt;/span&gt;&lt;span style=&#34;color: #4070a0&#34;&gt;&amp;#39;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;%&lt;/span&gt; (prev &lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&lt;/span&gt; &lt;span style=&#34;color: #40a070&#34;&gt;0xFFFFFFFF&lt;/span&gt;)
+
+    &lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;with&lt;/span&gt; &lt;span style=&#34;color: #007020&#34;&gt;open&lt;/span&gt;(outfile, &lt;span style=&#34;color: #4070a0&#34;&gt;&amp;#39;wb&amp;#39;&lt;/span&gt;) &lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;as&lt;/span&gt; fh:
+        fh&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;write(json&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;dumps(result, sort_keys&lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #007020&#34;&gt;True&lt;/span&gt;, indent&lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #40a070&#34;&gt;4&lt;/span&gt;, separators&lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;(&lt;span style=&#34;color: #4070a0&#34;&gt;&amp;#39;,&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color: #4070a0&#34;&gt;&amp;#39;: &amp;#39;&lt;/span&gt;)))
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;The fancy &lt;code&gt;relpath&lt;/code&gt; thing is so the output is more manageable (more on that
+later).  The file output looks a little like this:
+&lt;a name=&#34;jsonfile&#34;&gt;&lt;/a&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f0f0f0&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;{
+    &lt;span style=&#34;color: #062873; font-weight: bold&#34;&gt;&amp;quot;about-us.jpg&amp;quot;&lt;/span&gt;: &lt;span style=&#34;color: #4070a0&#34;&gt;&amp;quot;8212d43f&amp;quot;&lt;/span&gt;,
+    &lt;span style=&#34;color: #062873; font-weight: bold&#34;&gt;&amp;quot;favicon.ico&amp;quot;&lt;/span&gt;: &lt;span style=&#34;color: #4070a0&#34;&gt;&amp;quot;be79d92e&amp;quot;&lt;/span&gt;,
+    &lt;span style=&#34;color: #062873; font-weight: bold&#34;&gt;&amp;quot;slider/title-img-01.jpg&amp;quot;&lt;/span&gt;: &lt;span style=&#34;color: #4070a0&#34;&gt;&amp;quot;5849f6f0&amp;quot;&lt;/span&gt;,
+    &lt;span style=&#34;color: #062873; font-weight: bold&#34;&gt;&amp;quot;slider/title-img-02.jpg&amp;quot;&lt;/span&gt;: &lt;span style=&#34;color: #4070a0&#34;&gt;&amp;quot;a66c8271&amp;quot;&lt;/span&gt;,
+    &lt;span style=&#34;color: #062873; font-weight: bold&#34;&gt;&amp;quot;slider/title-img-03.jpg&amp;quot;&lt;/span&gt;: &lt;span style=&#34;color: #4070a0&#34;&gt;&amp;quot;2e2cbe84&amp;quot;&lt;/span&gt;
+}
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;h1 id=&#34;jinja2:32848604b4bca00ae54abd221a684de4&#34;&gt;Jinja2&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://jinja.pocoo.org/&#34;&gt;Jinja2&lt;/a&gt; is a templating tool used by many Python-based
+web development frameworks (like &lt;a href=&#34;http://flask.pocoo.org/&#34;&gt;Flask&lt;/a&gt; and
+&lt;a href=&#34;https://bottlepy.org&#34;&gt;bottle.py&lt;/a&gt;).  It&amp;rsquo;s really quite handy when it comes to
+creating a single HTML file using nice
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Object-oriented_programming&#34;&gt;OO&lt;/a&gt;
+concepts like inheritance.&lt;/p&gt;
+
+&lt;h2 id=&#34;filter:32848604b4bca00ae54abd221a684de4&#34;&gt;Filter&lt;/h2&gt;
+
+&lt;p&gt;The first thing we want to do is to add a custom Jinja2 &lt;em&gt;filter&lt;/em&gt;.  This is the
+thing that will compare some input to our &lt;a href=&#34;#jsonfile&#34;&gt;JSON data&lt;/a&gt; and return a URL.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f0f0f0&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;CACHEBUSTER &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; json&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;loads(&lt;span style=&#34;color: #007020&#34;&gt;open&lt;/span&gt;(THIS_DIR &lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color: #4070a0&#34;&gt;&amp;#39;/cachbuster.json&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color: #4070a0&#34;&gt;&amp;#39;rb&amp;#39;&lt;/span&gt;)&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;read())
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;CACHEBUSTER&lt;/code&gt; is just the data that was calculated during our build step.&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f0f0f0&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #06287e&#34;&gt;imageloader&lt;/span&gt;(partial_path):
+    &lt;span style=&#34;color: #4070a0; font-style: italic&#34;&gt;&amp;#39;&amp;#39;&amp;#39;&lt;/span&gt;
+&lt;span style=&#34;color: #4070a0; font-style: italic&#34;&gt;    Returns the path with a cachbuster tag if found, or the path otherwise.&lt;/span&gt;
+&lt;span style=&#34;color: #4070a0; font-style: italic&#34;&gt;    &amp;#39;&amp;#39;&amp;#39;&lt;/span&gt;
+    &lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;if&lt;/span&gt; partial_path &lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;in&lt;/span&gt; CACHEBUSTER:
+        &lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #4070a0&#34;&gt;&amp;#39;/static/images/&amp;#39;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; partial_path &lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color: #4070a0&#34;&gt;&amp;#39;?&amp;#39;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; CACHEBUSTER[partial_path]
+
+    &lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #4070a0&#34;&gt;&amp;#39;/static/images/&amp;#39;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; partial_path
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;The function &lt;code&gt;imageloader&lt;/code&gt; is the thing that we&amp;rsquo;ll usee in our Jinja2 templates.
+This function accepts a single input, &lt;code&gt;partial_path&lt;/code&gt;.  We check for the
+existence of that path in our data.  If we find it, we return a URL with the
+calculation appended as a &amp;ldquo;query&amp;rdquo;.  If not, we&amp;rsquo;ll assume that the path is
+relative to &lt;code&gt;/static/images/&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Using &lt;a href=&#34;#jsonfile&#34;&gt;our data&lt;/a&gt; file from above:
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f0f0f0&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;print&lt;/span&gt; imageloader(&lt;span style=&#34;color: #4070a0&#34;&gt;&amp;#39;slider/title-img-01.jpg&amp;#39;&lt;/span&gt;)
+&lt;span style=&#34;color: #4070a0&#34;&gt;&amp;#39;/static/images/slider/title-img-01.jpg?5849f6f0&amp;#39;&lt;/span&gt;
+&lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;print&lt;/span&gt; imageloader(&lt;span style=&#34;color: #4070a0&#34;&gt;&amp;#39;someimage.jpg&amp;#39;&lt;/span&gt;)
+&lt;span style=&#34;color: #4070a0&#34;&gt;&amp;#39;/static/images/someimage.jpg&amp;#39;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;All good!  Any time we make a change to &lt;code&gt;slider/title-img-01.jpg&lt;/code&gt;, the
+calculation will change, and we&amp;rsquo;ll get a new URL.  Any item that&amp;rsquo;s not
+pre-calculated will be returned like normal.&lt;/p&gt;
+
+&lt;p&gt;The last part is to tell Jinja2 about this new filter in &lt;code&gt;app.py&lt;/code&gt;.
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f0f0f0&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;jinja2_loader &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; jinja2&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;FileSystemLoader(TEMPLATE_DIR)
+jinja2_env &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; jinja2&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;Environment(autoescape&lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #007020&#34;&gt;True&lt;/span&gt;, loader&lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;jinja2_loader)
+jinja2_env&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;filters[&lt;span style=&#34;color: #4070a0&#34;&gt;&amp;#39;imageloader&amp;#39;&lt;/span&gt;] &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; imageloader
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;The magic is the &lt;code&gt;jinja2_env.filters[&#39;imageloader&#39;] = imageloader&lt;/code&gt; line.  That
+tells Jinja2 to call our &lt;code&gt;imageloader()&lt;/code&gt; function any time it sees a filter
+named &lt;code&gt;imageloader&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;template-use:32848604b4bca00ae54abd221a684de4&#34;&gt;Template Use&lt;/h2&gt;
+
+&lt;p&gt;Here&amp;rsquo;s how I use the new filter inside a template:
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f0f0f0&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&amp;lt;&lt;span style=&#34;color: #062873; font-weight: bold&#34;&gt;img&lt;/span&gt; &lt;span style=&#34;color: #4070a0&#34;&gt;src&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #4070a0&#34;&gt;&amp;quot;{{&amp;#39;slider/title-img-01.jpg&amp;#39; | imageloader}}&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #4070a0&#34;&gt;alt&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #4070a0&#34;&gt;&amp;quot;Title slider image 1&amp;quot;&lt;/span&gt;&amp;gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;&#39;slider/title-img-01.jpg&#39;&lt;/code&gt; gets passed to our function, which returns
+&lt;code&gt;&#39;/static/images/slider/title-img-01.jpg?5849f6f0&#39;&lt;/code&gt;.  That whole string then
+goes into the template, resulting in this:
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f0f0f0&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&amp;lt;&lt;span style=&#34;color: #062873; font-weight: bold&#34;&gt;img&lt;/span&gt; &lt;span style=&#34;color: #4070a0&#34;&gt;src&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #4070a0&#34;&gt;&amp;quot;/static/images/slider/title-img-01.jpg?5849f6f0&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #4070a0&#34;&gt;alt&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #4070a0&#34;&gt;&amp;quot;Title slider image 1&amp;quot;&lt;/span&gt;&amp;gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Perfect!  As long as we keep generating our JSON file during our build process,
+the templates will always point to the latest asset without regard to our
+cache settings.&lt;/p&gt;
+
+&lt;h1 id=&#34;where-to-go-from-here:32848604b4bca00ae54abd221a684de4&#34;&gt;Where to go from here&lt;/h1&gt;
+
+&lt;p&gt;I showed you how I cache-bust the images from one of my websites.  This is done
+in pure Python, without other tools like &lt;code&gt;Grunt&lt;/code&gt;.  If you are already using
+compile tools, you may as well find out how they do cache-busting.  But what
+fun is that?&lt;/p&gt;
+
+&lt;p&gt;This can be extended to your other assets.  For example, why not to your
+&lt;code&gt;.css&lt;/code&gt; and &lt;code&gt;.js&lt;/code&gt; too?  That excersize is left up to the reader ;)&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Windows, Git, and SSH Keys</title>

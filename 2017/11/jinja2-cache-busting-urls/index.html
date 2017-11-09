@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <title>
+    Jinja2 Cache Busting URLs in Python // mtik00
+  </title>
+
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+<meta name="description" content="">
+<meta name="keywords" content="">
+<meta name="author" content="">
+<meta name="generator" content="Hugo 0.14" />
+
+  <meta property="og:title" content="Jinja2 Cache Busting URLs in Python" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:url" content="https://mtik00.com/2017/11/jinja2-cache-busting-urls/" />
+
+
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/base-min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/pure-min.css">
+  
+  
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/grids-responsive-min.css">
+  
+  
+
+  <link rel="stylesheet" href="/css/redlounge.css?v3">
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href='//fonts.googleapis.com/css?family=Raleway:400,200,100,700,300,500,600,800' rel='stylesheet' type='text/css'>
+  <link href='//fonts.googleapis.com/css?family=Libre+Baskerville:400,700,400italic' rel='stylesheet' type='text/css'>
+
+  
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="mtik00" />
+
+  
+
+  
+
+  
+
+  <link rel="stylesheet" href="/css/mtik00.css?v3">
+</head>
+
+<body>
+	
+
+	<div id="layout" class="pure-g">
+    
+
+<div class="sidebar pure-u-1 pure-u-md-1-4">
+  <div class="header">
+    
+
+    <h1 class="brand-title">mtik00</h1>
+    <h2 class="brand-tagline">Musings on software</h2>
+
+    <nav id="primary_nav_wrap">
+      <ul>
+        
+        <li><span class="nav-item-separator">//</span><a href="https://mtik00.com">Home</a></li>
+        
+            
+                <li><span class="nav-item-separator">//</span><a href="/about/">About</a></li>
+            
+        
+            
+                <li><span class="nav-item-separator">//</span><a href="/archives/">Archives</a></li>
+            
+        
+      </ul>
+    </nav>
+
+    
+        <div class="social-buttons">
+        
+            
+                <a href="https://github.com/mtik00" target="_blank"><i class='fa fa-github fa-lg'></i></a>
+            
+        
+            
+                <a href="http://stackoverflow.com/users/3696827/mtik00" target="_blank"><i class='fa fa-stack-overflow fa-lg'></i></a>
+            
+        
+            
+                <a href="https://www.linkedin.com/in/timothymcfadden" target="_blank"><i class='fa fa-linkedin fa-lg'></i></a>
+            
+        
+            
+                <a href="http://feeds.feedburner.com/mtik00" target="_blank"><i class='fa fa-rss fa-lg'></i></a>
+            
+        
+
+        </div>
+    
+
+  </div>
+  
+    <div>
+        
+
+
+<br>
+<div id="search_box" class="pure-u-1-2" style="padding-left: 1em;">
+    <div id="search_text">Search:
+    <input id="search" type="text"></div>
+</div>
+<ul id="results"></ul>
+
+<script type="text/javascript" src="/js/jquery-1.11.1.min.js?v3"></script>
+<script type="text/javascript" src="/js/lunr.min.js?v3"></script>
+<script type="text/javascript" src="/js/lunr-search.js?v3"></script>
+
+    </div>
+  
+</div>
+
+
+	
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+		<a name="top"></a>
+		
+
+		
+			
+		    <div id="toc" class="pure-u-1 pure-u-md-1-4">
+				<small class="toc-label">Contents</small>
+		   	 	<nav id="TableOfContents">
+<ul>
+<li><a href="#what-is-caching:32848604b4bca00ae54abd221a684de4">What is &ldquo;caching&rdquo;</a></li>
+<li><a href="#busting-the-cache:32848604b4bca00ae54abd221a684de4">Busting the cache</a></li>
+<li><a href="#pre-calculate-vs-jit:32848604b4bca00ae54abd221a684de4">Pre-calculate vs JIT</a></li>
+<li><a href="#jinja2:32848604b4bca00ae54abd221a684de4">Jinja2</a>
+<ul>
+<li><a href="#filter:32848604b4bca00ae54abd221a684de4">Filter</a></li>
+<li><a href="#template-use:32848604b4bca00ae54abd221a684de4">Template Use</a></li>
+</ul></li>
+<li><a href="#where-to-go-from-here:32848604b4bca00ae54abd221a684de4">Where to go from here</a></li>
+</ul>
+</nav>
+		    </div>
+		    
+	    
+  		<section class="post">
+            <h1 class="post-title">
+              <a href="/2017/11/jinja2-cache-busting-urls/">Jinja2 Cache Busting URLs in Python</a>
+            </h1>
+            <h3 class="post-subtitle">
+            	
+            </h3>
+            
+            	<span class="post-date">
+                	<span class="post-date-day"><sup>9</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Nov</span> <span class="post-date-year">2017</span>
+            	</span>
+            	
+            
+            	
+            
+
+			
+			
+				<div class="post-categories">
+				
+					<a class="post-category post-category-web" href="https://mtik00.com/categories/web">web</a>
+				
+					<a class="post-category post-category-python" href="https://mtik00.com/categories/python">python</a>
+				
+				</div>
+			
+
+			
+
+			
+
+            
+
+<p>Cache busting is a technique the gives web developers a compromise between
+asset load speeds and new features.  In this article,
+we&rsquo;ll discuss a <em>pure Python</em> way of implementing this feature in your Jinja2
+templates.</p>
+
+<h1 id="what-is-caching:32848604b4bca00ae54abd221a684de4">What is &ldquo;caching&rdquo;</h1>
+
+<p>NOTE: This article will not cover HTML cache headers, proxy settings, etc.</p>
+
+<p>Everything you see on a web page is <em>loaded</em> from somewhere.  That &ldquo;somewhere&rdquo;
+could be a VPS in the cloud, a <a href="https://en.wikipedia.org/wiki/Content_delivery_network">CDN</a>
+service like <a href="https://www.cloudflare.com/">CloudFlare</a>, your machine, and so
+on.  We&rsquo;ll call these things &ldquo;assets&rdquo;.  Assets are images and text files used
+to tell your browser how the page you are looking at should look.  These are
+mostly things that don&rsquo;t really change too often.</p>
+
+<p>Since assets don&rsquo;t change often, you can <em>really</em> speed up page loading by using
+something called &ldquo;cache&rdquo;.  Serving files from the webserver can be really slow,
+especially if it&rsquo;s a very popular website, or your internet connection is slow.
+The good news is that if you have visited that page recently, some or all of
+the assets will already be on your computer.</p>
+
+<p>This all happens without much input from you, the user.  Your browser will
+cache by default (unless using something like Tor Browser).  Even if you have
+your browser cache disabled, the assets may be cached by a service like
+<a href="https://www.cloudflare.com/">CloudFlare</a>.  That&rsquo;s out of your control.</p>
+
+<p>Quick loading is great, but what happens when the version of
+<code>cute-puppy.jpg</code> you have in your cache is different from what&rsquo;s on the server?
+You&rsquo;ll continue to see the same old boring puppy image.
+<a href="https://en.wikipedia.org/wiki/Fear_of_missing_out">FOMO</a> anyone?</p>
+
+<p>There&rsquo;s also evidence that search engines prioritize websites that use very
+long cache times (e.g. Google&rsquo;s own Page Insights tool).  A nice article on
+how caching works can be found here: <a href="https://jakearchibald.com/2016/caching-best-practices/">https://jakearchibald.com/2016/caching-best-practices/</a></p>
+
+<h1 id="busting-the-cache:32848604b4bca00ae54abd221a684de4">Busting the cache</h1>
+
+<p>Web developers use a technique called &ldquo;cache busting&rdquo; to ensure that any
+change to <code>cute-puppy.jpg</code> is immediately seen by users.  They get around any
+&ldquo;cache&rdquo; mechanism by generally taking 1 of these approaches:</p>
+
+<ul>
+<li>Change the filename: Instead of <code>cute-puppy.jpg</code>, they&rsquo;ll use something
+like <code>cute-puppy-v1.jpg</code>.  If the change the content, they&rsquo;ll change
+the name to <code>cute-puppy-v2.jpg</code>.</li>
+<li>Change the URL: Instead of using <code>/static/images/cute-puppy.jpg</code> in
+HTML, they&rsquo;ll use something like <code>/static/images/cute-puppy.jpg?v1</code>.</li>
+</ul>
+
+<p>The idea is the same.  Any change a developer makes to the <em>&ldquo;asset&rdquo;</em> will cause
+viewers to download the updated file.</p>
+
+<p>I prefer the second method.  I think this is cleaner, and causes less overall
+churn in my source code control.</p>
+
+<h1 id="pre-calculate-vs-jit:32848604b4bca00ae54abd221a684de4">Pre-calculate vs JIT</h1>
+
+<p>The way I see it, you have two options here: 1) Use a build step to version your
+assets; 2) perform a &ldquo;just in time&rdquo; calculation when the resource is requested.
+This really depends on your process, but I don&rsquo;t see a downside to pre-calculating a version.
+This method should also perform much better under load.  Admittedly, I&rsquo;m too lazy to measure
+it, so <a href="https://en.wiktionary.org/wiki/YMMV">YMMV</a>.</p>
+
+<p>I decided to create a script that calculated the <a href="https://en.wikipedia.org/wiki/Cyclic_redundancy_check">CRC32</a>
+for each of my static images and store the result in a JSON file.  I load that
+file at the start of my script.  This works great!  It does, however, cause a
+lookup to occur each time the Jinja2 template is <em>rendered</em>.  Jinja2 is pretty
+good a caching rendered templates (moar cache!), so I think that&rsquo;s fine.</p>
+
+<p>NOTE: You could also dynamically create this table at application start.  I
+chose not to just to keep the start process simple and clean.</p>
+
+<p>Here&rsquo;s my Python function to calculate the
+<a href="https://en.wikipedia.org/wiki/Cyclic_redundancy_check">CRC32</a> for each of my
+images:
+<div class="highlight" style="background: #f0f0f0"><pre style="line-height: 125%"><span></span><span style="color: #007020; font-weight: bold">import</span> <span style="color: #0e84b5; font-weight: bold">zlib</span>
+<span style="color: #007020; font-weight: bold">def</span> <span style="color: #06287e">build</span>():
+    <span style="color: #4070a0; font-style: italic">&quot;&quot;&quot;</span>
+<span style="color: #4070a0; font-style: italic">    Builds the release files</span>
+<span style="color: #4070a0; font-style: italic">    &quot;&quot;&quot;</span>
+    <span style="color: #60a0b0; font-style: italic"># Calculates and stores the CRC32 for all images in &#39;static/images&#39;</span>
+    outfile <span style="color: #666666">=</span> os<span style="color: #666666">.</span>path<span style="color: #666666">.</span>join(THIS_DIR, <span style="color: #4070a0">&#39;app&#39;</span>, <span style="color: #4070a0">&#39;cachbuster.json&#39;</span>)
+    image_dir <span style="color: #666666">=</span> os<span style="color: #666666">.</span>path<span style="color: #666666">.</span>join(THIS_DIR, <span style="color: #4070a0">&#39;html&#39;</span>, <span style="color: #4070a0">&#39;static&#39;</span>, <span style="color: #4070a0">&#39;images&#39;</span>)
+    result <span style="color: #666666">=</span> {}
+    <span style="color: #007020; font-weight: bold">for</span> root, dirs, files <span style="color: #007020; font-weight: bold">in</span> os<span style="color: #666666">.</span>walk(image_dir):
+        <span style="color: #007020; font-weight: bold">for</span> fname <span style="color: #007020; font-weight: bold">in</span> files:
+            fpath <span style="color: #666666">=</span> root <span style="color: #666666">+</span> <span style="color: #4070a0">&#39;/&#39;</span> <span style="color: #666666">+</span> fname
+            relpath <span style="color: #666666">=</span> fpath[<span style="color: #007020">len</span>(image_dir) <span style="color: #666666">+</span> <span style="color: #40a070">1</span>:]<span style="color: #666666">.</span>replace(<span style="color: #4070a0">&#39;</span><span style="color: #4070a0; font-weight: bold">\\</span><span style="color: #4070a0">&#39;</span>, <span style="color: #4070a0">&#39;/&#39;</span>)
+            prev <span style="color: #666666">=</span> <span style="color: #40a070">0</span>
+            <span style="color: #007020; font-weight: bold">for</span> line <span style="color: #007020; font-weight: bold">in</span> <span style="color: #007020">open</span>(fpath, <span style="color: #4070a0">&#39;rb&#39;</span>):
+                prev <span style="color: #666666">=</span> zlib<span style="color: #666666">.</span>crc32(line, prev)
+            result[relpath] <span style="color: #666666">=</span> <span style="color: #4070a0">&#39;</span><span style="color: #70a0d0; font-style: italic">%x</span><span style="color: #4070a0">&#39;</span> <span style="color: #666666">%</span> (prev <span style="color: #666666">&amp;</span> <span style="color: #40a070">0xFFFFFFFF</span>)
+
+    <span style="color: #007020; font-weight: bold">with</span> <span style="color: #007020">open</span>(outfile, <span style="color: #4070a0">&#39;wb&#39;</span>) <span style="color: #007020; font-weight: bold">as</span> fh:
+        fh<span style="color: #666666">.</span>write(json<span style="color: #666666">.</span>dumps(result, sort_keys<span style="color: #666666">=</span><span style="color: #007020">True</span>, indent<span style="color: #666666">=</span><span style="color: #40a070">4</span>, separators<span style="color: #666666">=</span>(<span style="color: #4070a0">&#39;,&#39;</span>, <span style="color: #4070a0">&#39;: &#39;</span>)))
+</pre></div>
+</p>
+
+<p>The fancy <code>relpath</code> thing is so the output is more manageable (more on that
+later).  The file output looks a little like this:
+<a name="jsonfile"></a>
+<div class="highlight" style="background: #f0f0f0"><pre style="line-height: 125%"><span></span>{
+    <span style="color: #062873; font-weight: bold">&quot;about-us.jpg&quot;</span>: <span style="color: #4070a0">&quot;8212d43f&quot;</span>,
+    <span style="color: #062873; font-weight: bold">&quot;favicon.ico&quot;</span>: <span style="color: #4070a0">&quot;be79d92e&quot;</span>,
+    <span style="color: #062873; font-weight: bold">&quot;slider/title-img-01.jpg&quot;</span>: <span style="color: #4070a0">&quot;5849f6f0&quot;</span>,
+    <span style="color: #062873; font-weight: bold">&quot;slider/title-img-02.jpg&quot;</span>: <span style="color: #4070a0">&quot;a66c8271&quot;</span>,
+    <span style="color: #062873; font-weight: bold">&quot;slider/title-img-03.jpg&quot;</span>: <span style="color: #4070a0">&quot;2e2cbe84&quot;</span>
+}
+</pre></div>
+</p>
+
+<h1 id="jinja2:32848604b4bca00ae54abd221a684de4">Jinja2</h1>
+
+<p><a href="http://jinja.pocoo.org/">Jinja2</a> is a templating tool used by many Python-based
+web development frameworks (like <a href="http://flask.pocoo.org/">Flask</a> and
+<a href="https://bottlepy.org">bottle.py</a>).  It&rsquo;s really quite handy when it comes to
+creating a single HTML file using nice
+<a href="https://en.wikipedia.org/wiki/Object-oriented_programming">OO</a>
+concepts like inheritance.</p>
+
+<h2 id="filter:32848604b4bca00ae54abd221a684de4">Filter</h2>
+
+<p>The first thing we want to do is to add a custom Jinja2 <em>filter</em>.  This is the
+thing that will compare some input to our <a href="#jsonfile">JSON data</a> and return a URL.</p>
+
+<p><div class="highlight" style="background: #f0f0f0"><pre style="line-height: 125%"><span></span>CACHEBUSTER <span style="color: #666666">=</span> json<span style="color: #666666">.</span>loads(<span style="color: #007020">open</span>(THIS_DIR <span style="color: #666666">+</span> <span style="color: #4070a0">&#39;/cachbuster.json&#39;</span>, <span style="color: #4070a0">&#39;rb&#39;</span>)<span style="color: #666666">.</span>read())
+</pre></div>
+</p>
+
+<p><code>CACHEBUSTER</code> is just the data that was calculated during our build step.</p>
+
+<p><div class="highlight" style="background: #f0f0f0"><pre style="line-height: 125%"><span></span><span style="color: #007020; font-weight: bold">def</span> <span style="color: #06287e">imageloader</span>(partial_path):
+    <span style="color: #4070a0; font-style: italic">&#39;&#39;&#39;</span>
+<span style="color: #4070a0; font-style: italic">    Returns the path with a cachbuster tag if found, or the path otherwise.</span>
+<span style="color: #4070a0; font-style: italic">    &#39;&#39;&#39;</span>
+    <span style="color: #007020; font-weight: bold">if</span> partial_path <span style="color: #007020; font-weight: bold">in</span> CACHEBUSTER:
+        <span style="color: #007020; font-weight: bold">return</span> <span style="color: #4070a0">&#39;/static/images/&#39;</span> <span style="color: #666666">+</span> partial_path <span style="color: #666666">+</span> <span style="color: #4070a0">&#39;?&#39;</span> <span style="color: #666666">+</span> CACHEBUSTER[partial_path]
+
+    <span style="color: #007020; font-weight: bold">return</span> <span style="color: #4070a0">&#39;/static/images/&#39;</span> <span style="color: #666666">+</span> partial_path
+</pre></div>
+</p>
+
+<p>The function <code>imageloader</code> is the thing that we&rsquo;ll usee in our Jinja2 templates.
+This function accepts a single input, <code>partial_path</code>.  We check for the
+existence of that path in our data.  If we find it, we return a URL with the
+calculation appended as a &ldquo;query&rdquo;.  If not, we&rsquo;ll assume that the path is
+relative to <code>/static/images/</code>.</p>
+
+<p>Using <a href="#jsonfile">our data</a> file from above:
+<div class="highlight" style="background: #f0f0f0"><pre style="line-height: 125%"><span></span><span style="color: #666666">&gt;&gt;&gt;</span> <span style="color: #007020; font-weight: bold">print</span> imageloader(<span style="color: #4070a0">&#39;slider/title-img-01.jpg&#39;</span>)
+<span style="color: #4070a0">&#39;/static/images/slider/title-img-01.jpg?5849f6f0&#39;</span>
+<span style="color: #666666">&gt;&gt;&gt;</span> <span style="color: #007020; font-weight: bold">print</span> imageloader(<span style="color: #4070a0">&#39;someimage.jpg&#39;</span>)
+<span style="color: #4070a0">&#39;/static/images/someimage.jpg&#39;</span>
+</pre></div>
+</p>
+
+<p>All good!  Any time we make a change to <code>slider/title-img-01.jpg</code>, the
+calculation will change, and we&rsquo;ll get a new URL.  Any item that&rsquo;s not
+pre-calculated will be returned like normal.</p>
+
+<p>The last part is to tell Jinja2 about this new filter in <code>app.py</code>.
+<div class="highlight" style="background: #f0f0f0"><pre style="line-height: 125%"><span></span>jinja2_loader <span style="color: #666666">=</span> jinja2<span style="color: #666666">.</span>FileSystemLoader(TEMPLATE_DIR)
+jinja2_env <span style="color: #666666">=</span> jinja2<span style="color: #666666">.</span>Environment(autoescape<span style="color: #666666">=</span><span style="color: #007020">True</span>, loader<span style="color: #666666">=</span>jinja2_loader)
+jinja2_env<span style="color: #666666">.</span>filters[<span style="color: #4070a0">&#39;imageloader&#39;</span>] <span style="color: #666666">=</span> imageloader
+</pre></div>
+</p>
+
+<p>The magic is the <code>jinja2_env.filters['imageloader'] = imageloader</code> line.  That
+tells Jinja2 to call our <code>imageloader()</code> function any time it sees a filter
+named <code>imageloader</code>.</p>
+
+<h2 id="template-use:32848604b4bca00ae54abd221a684de4">Template Use</h2>
+
+<p>Here&rsquo;s how I use the new filter inside a template:
+<div class="highlight" style="background: #f0f0f0"><pre style="line-height: 125%"><span></span>&lt;<span style="color: #062873; font-weight: bold">img</span> <span style="color: #4070a0">src</span><span style="color: #666666">=</span><span style="color: #4070a0">&quot;{{&#39;slider/title-img-01.jpg&#39; | imageloader}}&quot;</span> <span style="color: #4070a0">alt</span><span style="color: #666666">=</span><span style="color: #4070a0">&quot;Title slider image 1&quot;</span>&gt;
+</pre></div>
+</p>
+
+<p><code>'slider/title-img-01.jpg'</code> gets passed to our function, which returns
+<code>'/static/images/slider/title-img-01.jpg?5849f6f0'</code>.  That whole string then
+goes into the template, resulting in this:
+<div class="highlight" style="background: #f0f0f0"><pre style="line-height: 125%"><span></span>&lt;<span style="color: #062873; font-weight: bold">img</span> <span style="color: #4070a0">src</span><span style="color: #666666">=</span><span style="color: #4070a0">&quot;/static/images/slider/title-img-01.jpg?5849f6f0&quot;</span> <span style="color: #4070a0">alt</span><span style="color: #666666">=</span><span style="color: #4070a0">&quot;Title slider image 1&quot;</span>&gt;
+</pre></div>
+</p>
+
+<p>Perfect!  As long as we keep generating our JSON file during our build process,
+the templates will always point to the latest asset without regard to our
+cache settings.</p>
+
+<h1 id="where-to-go-from-here:32848604b4bca00ae54abd221a684de4">Where to go from here</h1>
+
+<p>I showed you how I cache-bust the images from one of my websites.  This is done
+in pure Python, without other tools like <code>Grunt</code>.  If you are already using
+compile tools, you may as well find out how they do cache-busting.  But what
+fun is that?</p>
+
+<p>This can be extended to your other assets.  For example, why not to your
+<code>.css</code> and <code>.js</code> too?  That excersize is left up to the reader ;)</p>
+
+
+			
+
+			
+
+			
+				<div class="paging">
+					<span class="paging-label">More Reading</span>
+					
+
+					
+					<div class="paging-older">
+						<span class="dark-red">Older</span><span class="decorative-marker">//</span>
+			            <a class="paging-link" href="/2017/11/windows-git-and-ssh-keys/">Windows, Git, and SSH Keys</a>
+		            </div>
+		            
+	            </div>
+            
+          </section>
+          
+          	<div id="disqus_thread"></div>
+<script>
+    
+
+    
+    var disqus_config = function () {
+        this.page.url = "https://mtik00.com";  
+        this.page.identifier = "mtik00"; 
+    };
+    
+    (function() {  
+        var d = document, s = d.createElement('script');
+        
+        s.src = 'https://mtik00.disqus.com/embed.js';
+        
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+          
+
+      <div class="footer">
+	<hr class="thin" />
+	<div class="pure-menu pure-menu-horizontal pure-menu-open">
+		<ul class="footer-menu">
+		
+		</ul>
+	</div>
+
+	<p><a rel='license' href='http://creativecommons.org/licenses/by-nc-sa/4.0/' target='_blank'><img alt='Creative Commons License' style='border-width:0' src='https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png' /></a><br /><span xmlns:dct='http://purl.org/dc/terms/' property='dct:title'>mtik00.com</span> by <a xmlns:cc='http://creativecommons.org/ns#' href='http://mtik00.com' property='cc:attributionName' rel='cc:attributionURL' target='_blank'>Timothy McFadden</a> is licensed under a <a rel='license' href='http://creativecommons.org/licenses/by-nc-sa/4.0/' target='_blank'>Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.</p>
+</div>
+    </div>
+  </div>
+	
+
+	
+
+  
+</body>
+</html>
