@@ -213,8 +213,8 @@ jinja2_env&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;filters[&lt;s
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/p&gt;
 
-&lt;p&gt;The magic is &lt;code&gt;3&lt;/code&gt;.  That tells Jinja2 to call our &lt;code&gt;imageloader()&lt;/code&gt; function any
-time it sees a filter named &lt;code&gt;imageloader&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;The magic is line number &lt;code&gt;3&lt;/code&gt;.  That tells Jinja2 to call our &lt;code&gt;imageloader()&lt;/code&gt;
+function any time it sees a filter named &lt;code&gt;imageloader&lt;/code&gt;.&lt;/p&gt;
 
 &lt;h2 id=&#34;template-use:32848604b4bca00ae54abd221a684de4&#34;&gt;Template Use&lt;/h2&gt;
 
