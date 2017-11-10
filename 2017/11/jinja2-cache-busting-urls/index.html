@@ -261,7 +261,26 @@ chose not to just to keep the start process simple and clean.</p>
 <p>Here&rsquo;s my Python function to calculate the
 <a href="https://en.wikipedia.org/wiki/Cyclic_redundancy_check">CRC32</a> for each of my
 images:
-<div class="highlight" style="background: #f0f0f0"><pre style="line-height: 125%"><span></span><span style="color: #007020; font-weight: bold">import</span> <span style="color: #0e84b5; font-weight: bold">zlib</span>
+<table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20</pre></div></td><td class="code"><div class="highlight" style="background: #f0f0f0"><pre style="line-height: 125%"><span></span><span style="color: #007020; font-weight: bold">import</span> <span style="color: #0e84b5; font-weight: bold">zlib</span>
 <span style="color: #007020; font-weight: bold">def</span> <span style="color: #06287e">build</span>():
     <span style="color: #4070a0; font-style: italic">&quot;&quot;&quot;</span>
 <span style="color: #4070a0; font-style: italic">    Builds the release files</span>
@@ -282,7 +301,7 @@ images:
     <span style="color: #007020; font-weight: bold">with</span> <span style="color: #007020">open</span>(outfile, <span style="color: #4070a0">&#39;wb&#39;</span>) <span style="color: #007020; font-weight: bold">as</span> fh:
         fh<span style="color: #666666">.</span>write(json<span style="color: #666666">.</span>dumps(result, sort_keys<span style="color: #666666">=</span><span style="color: #007020">True</span>, indent<span style="color: #666666">=</span><span style="color: #40a070">4</span>, separators<span style="color: #666666">=</span>(<span style="color: #4070a0">&#39;,&#39;</span>, <span style="color: #4070a0">&#39;: &#39;</span>)))
 </pre></div>
-</p>
+</td></tr></table></p>
 
 <p>The fancy <code>relpath</code> thing is so the output is more manageable (more on that
 later).  The file output looks a little like this:
@@ -317,7 +336,14 @@ thing that will compare some input to our <a href="#jsonfile">JSON data</a> and 
 
 <p><code>CACHEBUSTER</code> is just the data that was calculated during our build step.</p>
 
-<p><div class="highlight" style="background: #f0f0f0"><pre style="line-height: 125%"><span></span><span style="color: #007020; font-weight: bold">def</span> <span style="color: #06287e">imageloader</span>(partial_path):
+<p><table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%">1
+2
+3
+4
+5
+6
+7
+8</pre></div></td><td class="code"><div class="highlight" style="background: #f0f0f0"><pre style="line-height: 125%"><span></span><span style="color: #007020; font-weight: bold">def</span> <span style="color: #06287e">imageloader</span>(partial_path):
     <span style="color: #4070a0; font-style: italic">&#39;&#39;&#39;</span>
 <span style="color: #4070a0; font-style: italic">    Returns the path with a cachbuster tag if found, or the path otherwise.</span>
 <span style="color: #4070a0; font-style: italic">    &#39;&#39;&#39;</span>
@@ -326,13 +352,13 @@ thing that will compare some input to our <a href="#jsonfile">JSON data</a> and 
 
     <span style="color: #007020; font-weight: bold">return</span> <span style="color: #4070a0">&#39;/static/images/&#39;</span> <span style="color: #666666">+</span> partial_path
 </pre></div>
-</p>
+</td></tr></table></p>
 
-<p>The function <code>imageloader</code> is the thing that we&rsquo;ll usee in our Jinja2 templates.
+<p>The function <code>imageloader</code> is the thing that we&rsquo;ll use in our Jinja2 templates.
 This function accepts a single input, <code>partial_path</code>.  We check for the
-existence of that path in our data.  If we find it, we return a URL with the
-calculation appended as a &ldquo;query&rdquo;.  If not, we&rsquo;ll assume that the path is
-relative to <code>/static/images/</code>.</p>
+existence of that path in our pre-compiled CRC32 data.  If we find it, we
+return a URL with the calculation appended as a &ldquo;query&rdquo;.  If not, we&rsquo;ll assume
+that the path is relative to <code>/static/images/</code>.</p>
 
 <p>Using <a href="#jsonfile">our data</a> file from above:
 <div class="highlight" style="background: #f0f0f0"><pre style="line-height: 125%"><span></span><span style="color: #666666">&gt;&gt;&gt;</span> <span style="color: #007020; font-weight: bold">print</span> imageloader(<span style="color: #4070a0">&#39;slider/title-img-01.jpg&#39;</span>)
@@ -347,15 +373,16 @@ calculation will change, and we&rsquo;ll get a new URL.  Any item that&rsquo;s n
 pre-calculated will be returned like normal.</p>
 
 <p>The last part is to tell Jinja2 about this new filter in <code>app.py</code>.
-<div class="highlight" style="background: #f0f0f0"><pre style="line-height: 125%"><span></span>jinja2_loader <span style="color: #666666">=</span> jinja2<span style="color: #666666">.</span>FileSystemLoader(TEMPLATE_DIR)
+<table class="highlighttable"><tr><td><div class="linenodiv" style="background-color: #f0f0f0; padding-right: 10px"><pre style="line-height: 125%">1
+2
+3</pre></div></td><td class="code"><div class="highlight" style="background: #f0f0f0"><pre style="line-height: 125%"><span></span>jinja2_loader <span style="color: #666666">=</span> jinja2<span style="color: #666666">.</span>FileSystemLoader(TEMPLATE_DIR)
 jinja2_env <span style="color: #666666">=</span> jinja2<span style="color: #666666">.</span>Environment(autoescape<span style="color: #666666">=</span><span style="color: #007020">True</span>, loader<span style="color: #666666">=</span>jinja2_loader)
 jinja2_env<span style="color: #666666">.</span>filters[<span style="color: #4070a0">&#39;imageloader&#39;</span>] <span style="color: #666666">=</span> imageloader
 </pre></div>
-</p>
+</td></tr></table></p>
 
-<p>The magic is the <code>jinja2_env.filters['imageloader'] = imageloader</code> line.  That
-tells Jinja2 to call our <code>imageloader()</code> function any time it sees a filter
-named <code>imageloader</code>.</p>
+<p>The magic is <code>3</code>.  That tells Jinja2 to call our <code>imageloader()</code> function any
+time it sees a filter named <code>imageloader</code>.</p>
 
 <h2 id="template-use:32848604b4bca00ae54abd221a684de4">Template Use</h2>
 

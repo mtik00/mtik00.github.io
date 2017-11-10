@@ -93,7 +93,26 @@ chose not to just to keep the start process simple and clean.&lt;/p&gt;
 &lt;p&gt;Here&amp;rsquo;s my Python function to calculate the
 &lt;a href=&#34;https://en.wikipedia.org/wiki/Cyclic_redundancy_check&#34;&gt;CRC32&lt;/a&gt; for each of my
 images:
-&lt;div class=&#34;highlight&#34; style=&#34;background: #f0f0f0&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0e84b5; font-weight: bold&#34;&gt;zlib&lt;/span&gt;
+&lt;table class=&#34;highlighttable&#34;&gt;&lt;tr&gt;&lt;td&gt;&lt;div class=&#34;linenodiv&#34; style=&#34;background-color: #f0f0f0; padding-right: 10px&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt; 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class=&#34;code&#34;&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f0f0f0&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #0e84b5; font-weight: bold&#34;&gt;zlib&lt;/span&gt;
 &lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #06287e&#34;&gt;build&lt;/span&gt;():
     &lt;span style=&#34;color: #4070a0; font-style: italic&#34;&gt;&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
 &lt;span style=&#34;color: #4070a0; font-style: italic&#34;&gt;    Builds the release files&lt;/span&gt;
@@ -114,7 +133,7 @@ images:
     &lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;with&lt;/span&gt; &lt;span style=&#34;color: #007020&#34;&gt;open&lt;/span&gt;(outfile, &lt;span style=&#34;color: #4070a0&#34;&gt;&amp;#39;wb&amp;#39;&lt;/span&gt;) &lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;as&lt;/span&gt; fh:
         fh&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;write(json&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;dumps(result, sort_keys&lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #007020&#34;&gt;True&lt;/span&gt;, indent&lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #40a070&#34;&gt;4&lt;/span&gt;, separators&lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;(&lt;span style=&#34;color: #4070a0&#34;&gt;&amp;#39;,&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color: #4070a0&#34;&gt;&amp;#39;: &amp;#39;&lt;/span&gt;)))
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/p&gt;
 
 &lt;p&gt;The fancy &lt;code&gt;relpath&lt;/code&gt; thing is so the output is more manageable (more on that
 later).  The file output looks a little like this:
@@ -149,7 +168,14 @@ thing that will compare some input to our &lt;a href=&#34;#jsonfile&#34;&gt;JSON
 
 &lt;p&gt;&lt;code&gt;CACHEBUSTER&lt;/code&gt; is just the data that was calculated during our build step.&lt;/p&gt;
 
-&lt;p&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f0f0f0&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #06287e&#34;&gt;imageloader&lt;/span&gt;(partial_path):
+&lt;p&gt;&lt;table class=&#34;highlighttable&#34;&gt;&lt;tr&gt;&lt;td&gt;&lt;div class=&#34;linenodiv&#34; style=&#34;background-color: #f0f0f0; padding-right: 10px&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;1
+2
+3
+4
+5
+6
+7
+8&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class=&#34;code&#34;&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f0f0f0&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #06287e&#34;&gt;imageloader&lt;/span&gt;(partial_path):
     &lt;span style=&#34;color: #4070a0; font-style: italic&#34;&gt;&amp;#39;&amp;#39;&amp;#39;&lt;/span&gt;
 &lt;span style=&#34;color: #4070a0; font-style: italic&#34;&gt;    Returns the path with a cachbuster tag if found, or the path otherwise.&lt;/span&gt;
 &lt;span style=&#34;color: #4070a0; font-style: italic&#34;&gt;    &amp;#39;&amp;#39;&amp;#39;&lt;/span&gt;
@@ -158,13 +184,13 @@ thing that will compare some input to our &lt;a href=&#34;#jsonfile&#34;&gt;JSON
 
     &lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #4070a0&#34;&gt;&amp;#39;/static/images/&amp;#39;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; partial_path
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/p&gt;
 
-&lt;p&gt;The function &lt;code&gt;imageloader&lt;/code&gt; is the thing that we&amp;rsquo;ll usee in our Jinja2 templates.
+&lt;p&gt;The function &lt;code&gt;imageloader&lt;/code&gt; is the thing that we&amp;rsquo;ll use in our Jinja2 templates.
 This function accepts a single input, &lt;code&gt;partial_path&lt;/code&gt;.  We check for the
-existence of that path in our data.  If we find it, we return a URL with the
-calculation appended as a &amp;ldquo;query&amp;rdquo;.  If not, we&amp;rsquo;ll assume that the path is
-relative to &lt;code&gt;/static/images/&lt;/code&gt;.&lt;/p&gt;
+existence of that path in our pre-compiled CRC32 data.  If we find it, we
+return a URL with the calculation appended as a &amp;ldquo;query&amp;rdquo;.  If not, we&amp;rsquo;ll assume
+that the path is relative to &lt;code&gt;/static/images/&lt;/code&gt;.&lt;/p&gt;
 
 &lt;p&gt;Using &lt;a href=&#34;#jsonfile&#34;&gt;our data&lt;/a&gt; file from above:
 &lt;div class=&#34;highlight&#34; style=&#34;background: #f0f0f0&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #007020; font-weight: bold&#34;&gt;print&lt;/span&gt; imageloader(&lt;span style=&#34;color: #4070a0&#34;&gt;&amp;#39;slider/title-img-01.jpg&amp;#39;&lt;/span&gt;)
@@ -179,15 +205,16 @@ calculation will change, and we&amp;rsquo;ll get a new URL.  Any item that&amp;r
 pre-calculated will be returned like normal.&lt;/p&gt;
 
 &lt;p&gt;The last part is to tell Jinja2 about this new filter in &lt;code&gt;app.py&lt;/code&gt;.
-&lt;div class=&#34;highlight&#34; style=&#34;background: #f0f0f0&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;jinja2_loader &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; jinja2&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;FileSystemLoader(TEMPLATE_DIR)
+&lt;table class=&#34;highlighttable&#34;&gt;&lt;tr&gt;&lt;td&gt;&lt;div class=&#34;linenodiv&#34; style=&#34;background-color: #f0f0f0; padding-right: 10px&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;1
+2
+3&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class=&#34;code&#34;&gt;&lt;div class=&#34;highlight&#34; style=&#34;background: #f0f0f0&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;jinja2_loader &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; jinja2&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;FileSystemLoader(TEMPLATE_DIR)
 jinja2_env &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; jinja2&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;Environment(autoescape&lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #007020&#34;&gt;True&lt;/span&gt;, loader&lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt;jinja2_loader)
 jinja2_env&lt;span style=&#34;color: #666666&#34;&gt;.&lt;/span&gt;filters[&lt;span style=&#34;color: #4070a0&#34;&gt;&amp;#39;imageloader&amp;#39;&lt;/span&gt;] &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; imageloader
 &lt;/pre&gt;&lt;/div&gt;
-&lt;/p&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/p&gt;
 
-&lt;p&gt;The magic is the &lt;code&gt;jinja2_env.filters[&#39;imageloader&#39;] = imageloader&lt;/code&gt; line.  That
-tells Jinja2 to call our &lt;code&gt;imageloader()&lt;/code&gt; function any time it sees a filter
-named &lt;code&gt;imageloader&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;The magic is &lt;code&gt;3&lt;/code&gt;.  That tells Jinja2 to call our &lt;code&gt;imageloader()&lt;/code&gt; function any
+time it sees a filter named &lt;code&gt;imageloader&lt;/code&gt;.&lt;/p&gt;
 
 &lt;h2 id=&#34;template-use:32848604b4bca00ae54abd221a684de4&#34;&gt;Template Use&lt;/h2&gt;
 
